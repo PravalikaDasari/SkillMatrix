@@ -1,0 +1,20 @@
+package com.skillset.dto;
+
+public class T {
+
+	public static void main(String[] args) {
+		 
+		EmployeeSkillDto t = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("supriya");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("supriya");
+		t.setReferenceDetailValue("supriya");
+		
+		
+		
+		 
+		
+	}
+
+}

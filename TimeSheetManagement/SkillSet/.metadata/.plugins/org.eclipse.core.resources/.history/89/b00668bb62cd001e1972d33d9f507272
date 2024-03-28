@@ -1,0 +1,28 @@
+package com.skillset.repo;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.skillset.dto.EmployeeSkillDto;
+import com.skillset.entity.EmployeeEntity;
+
+import jakarta.transaction.Transactional;
+@Transactional
+public interface SkillSetRepository extends JpaRepository<EmployeeEntity, Integer>{
+ 
+	@Query("select new com.skillset.dto.EmployeeSkillDto( e.firstName, e.designation, competencyLevelId, "
+			+ " s.skilName,  crd.referenceType as type ) "
+			+ " from  EmployeeEntity e, SkillEntity es, SkillEntity s, CommonReferenceDetailsEntity crd "
+			+ " where e.employeeId =es.employeeId "
+	 		+ " and  crd.referenceDetailId = es.skillTypeId")
+			 
+	/*
+	
+	@Query("select new com.skillset.dto.EmployeeSkillDto( e.firstName ) "
+			+ " from  EmployeeEntity e ")
+			*/
+	List<EmployeeSkillDto> fetch();
+	
+}

@@ -1,0 +1,51 @@
+package com.skillset.dto;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class T {
+
+	public static void main(String[] args) {
+
+		List l = new ArrayList();
+
+		EmployeeSkillDto t = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("python");
+
+		EmployeeSkillDto t1 = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("html");
+
+		EmployeeSkillDto t2 = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("java");
+
+		l.add(t);
+		l.add(t1);
+
+		l.add(t2);
+		
+		List l2 = new ArrayList();
+
+		
+		EmployeeSkillDetailsDto d2 = new EmployeeSkillDetailsDto();
+		Map<String, EmployeeSkillDetailsDto> m = new HashMap<>();
+		
+		
+		
+		
+		l2.add(d2);
+		
+		d2.setFirstnName(null);
+		
+		
+	}
+}

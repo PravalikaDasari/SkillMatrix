@@ -1,0 +1,28 @@
+package com.skillset.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.skillset.dto.EmployeeSkillDto;
+import com.skillset.servic.SkillSetService;
+
+
+@RestController
+public class SkillSetController {
+	
+	@Autowired
+	private SkillSetService service;
+	
+	@GetMapping("/fetch")
+	public ResponseEntity<List<EmployeeSkillDto>> FetchSkillDetails()
+	{
+		List<EmployeeSkillDto> skills = service.fetchSkills();
+		return new  ResponseEntity<List<EmployeeSkillDto>>(skills,HttpStatus.OK);
+	}
+
+}

@@ -1,0 +1,61 @@
+package com.skillset.serviceImpl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.skillset.dto.EmployeeSkillDetailsDto;
+import com.skillset.dto.EmployeeSkillDto;
+import com.skillset.repo.SkillSetRepository;
+import com.skillset.servic.SkillSetService;
+
+@Service
+public class SkillSetServiceImpl implements SkillSetService {
+
+	@Autowired
+	private SkillSetRepository repository;
+	
+	@Override
+	public Map<String, EmployeeSkillDetailsDto> fetchSkills() 
+	{
+		List<EmployeeSkillDto> skillSet=repository.fetch();
+		skillSet.stream().forEach(e->System.out.println(e));
+		
+		
+ 
+		 
+		Map<String, EmployeeSkillDetailsDto> m = new HashMap<>();
+
+		for (EmployeeSkillDto f : skillSet) {
+
+			String empName = f.getFirstName();
+			if (m.get(empName) == null) {
+				EmployeeSkillDetailsDto dto = new EmployeeSkillDetailsDto();
+				dto.setFirstnName(empName);
+				dto.setDesignation(f.getDesignation());
+				List<String> skillNamelist = new ArrayList();
+
+				skillNamelist.add(f.getSkillName());
+				dto.setSkill_name(skillNamelist);
+				m.put(empName, dto);
+			} else {
+				EmployeeSkillDetailsDto dto = m.get(empName);
+				dto.setFirstnName(empName);
+				dto.setDesignation(f.getDesignation());
+				List<String> skillNamelist = dto.getSkill_name();
+
+				skillNamelist.add(f.getSkillName());
+			}
+
+		}
+		
+		return m;
+	 
+	 
+	}
+
+}

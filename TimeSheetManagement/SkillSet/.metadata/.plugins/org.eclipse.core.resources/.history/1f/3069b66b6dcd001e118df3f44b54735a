@@ -1,0 +1,89 @@
+package com.skillset.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.skillset.dto.EmployeeSkillDetailsDto;
+import com.skillset.dto.EmployeeSkillDto;
+import com.skillset.servic.SkillSetService;
+
+
+@RestController
+public class SkillSetController {
+	
+	@Autowired
+	private SkillSetService service;
+	
+	@GetMapping("/fetch")
+	public ResponseEntity<Map<String, EmployeeSkillDetailsDto>> FetchSkillDetails()
+	{
+		List<EmployeeSkillDto> skills = service.fetchSkills();
+		
+		
+
+		List<EmployeeSkillDto> l = new ArrayList();
+
+		EmployeeSkillDto t = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("python");
+
+		EmployeeSkillDto t1 = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("html");
+
+		EmployeeSkillDto t2 = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("java");
+
+		l.add(t);
+		l.add(t1);
+
+		l.add(t2);
+
+	 
+	 
+		Map<String, EmployeeSkillDetailsDto> m = new HashMap<>();
+
+		for (EmployeeSkillDto f : l) {
+
+			String empName = f.getFirstName();
+			if (m.get(empName) == null) {
+				EmployeeSkillDetailsDto dto = new EmployeeSkillDetailsDto();
+				dto.setFirstnName(empName);
+				dto.setDesignation(f.getDesignation());
+				List<String> skillNamelist = new ArrayList();
+
+				skillNamelist.add(f.getSkillName());
+				m.put(empName, dto);
+			} else {
+				EmployeeSkillDetailsDto dto = m.get(empName);
+				dto.setFirstnName(empName);
+				dto.setDesignation(f.getDesignation());
+				List<String> skillNamelist = new ArrayList();
+
+				skillNamelist.add(f.getSkillName());
+			}
+
+		}
+
+	 
+	
+		
+		return new  ResponseEntity<Map<String, EmployeeSkillDetailsDto>> (m,HttpStatus.OK);
+	}
+
+}

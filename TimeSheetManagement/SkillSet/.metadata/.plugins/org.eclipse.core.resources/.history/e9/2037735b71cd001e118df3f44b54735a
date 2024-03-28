@@ -1,0 +1,10 @@
+package com.skillset.servic;
+
+import java.util.List;
+
+import com.skillset.dto.EmployeeSkillDto;
+
+public interface SkillSetService 
+{
+	List<EmployeeSkillDto> fetchSkills();
+}

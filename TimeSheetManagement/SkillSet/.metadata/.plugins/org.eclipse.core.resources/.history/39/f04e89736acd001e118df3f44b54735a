@@ -1,0 +1,11 @@
+package com.skillset.dto;
+
+public class T {
+
+	public static void main(String[] args) {
+		 
+		EmployeeSkillDto t = new EmployeeSkillDto();
+		
+	}
+
+}

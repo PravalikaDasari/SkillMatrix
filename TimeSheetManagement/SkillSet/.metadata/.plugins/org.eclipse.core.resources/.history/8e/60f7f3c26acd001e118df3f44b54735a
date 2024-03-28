@@ -1,0 +1,36 @@
+package com.skillset.dto;
+
+public class T {
+
+	public static void main(String[] args) {
+		 
+		List l = new ArrayList();
+		
+		EmployeeSkillDto t = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("python");
+	 
+
+
+		EmployeeSkillDto t1 = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("html");
+	 
+		
+		
+		EmployeeSkillDto t2 = new EmployeeSkillDto();
+		t.setFirstName("supriya");
+		t.setDesignation("sa");
+		t.setCompetencyLevelId(1);
+		t.setSkillName("java");
+ 
+		
+		 
+		
+	}
+
+}

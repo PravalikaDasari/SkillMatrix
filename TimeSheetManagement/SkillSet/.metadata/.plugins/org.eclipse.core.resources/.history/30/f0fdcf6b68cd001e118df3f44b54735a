@@ -1,0 +1,32 @@
+package com.skillset.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class EmployeeSkillDto {
+
+	  private String firstName;	
+	 
+     private Integer employeeId;
+     
+   
+     private String designation;	
+     private Integer employeeSkillId;	
+     private Integer competencyLevelId;	
+     private Integer skillTypeId;
+     private String skillName	;
+     private String referenceDetailsValues;
+     
+   
+
+
+}
