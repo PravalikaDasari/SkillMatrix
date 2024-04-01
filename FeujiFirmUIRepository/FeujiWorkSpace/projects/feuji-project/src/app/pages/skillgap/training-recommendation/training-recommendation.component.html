@@ -1,13 +1,12 @@
 <mat-card>
   <mat-card-content>
     <mat-tab-group>
-      <mat-tab label="Training Recommendations(High SkillGap)"
-        style="display: flex;flex-direction: row;color: black !important;">
+      <mat-tab label="Training Recommendations(High SkillGap)" style="display: flex;flex-direction: row;color: black !important;">
         <div id="section2">
-          <div class="message" *ngIf="skillGapMessage==2">
+          <div class="message"  *ngIf="skillGapMessage==2">
             <p class="toptext"> No High Gap in skills.</p>
             <p>You have demonstrated proficiency in all high-priority skills. Keep up the excellent work!</p>
-          </div>
+           </div>
           <div id="recommend-training" *ngFor="let skill of highGapSkills">
             <div class="container">
               <div id="firstDiv">
@@ -17,17 +16,17 @@
                 <div class="eachSkill">
                   <p class="skillname">{{skill.skillName}}</p>
                 </div>
-              </div>
+              </div>       
               <div class="secondDiv">
-                <div class="list">
-                  <div>
-                    <p><b>Current:</b>{{skill.acReferenceDetailsValues}}</p>
+                <div class="list">                
+                  <div >
+                    <p ><b>Current:</b>{{skill.acReferenceDetailsValues}}</p>
                   </div>
-                  <div>
-                    <p><b>Recommend:</b>{{skill.exReferenceDetailsValues}}</p>
+                  <div >
+                    <p ><b>Recommend:</b>{{skill.exReferenceDetailsValues}}</p>
                   </div>
-                  <div>
-                    <p><b>Description:</b>{{skill.description}}</p>
+                  <div >
+                    <p ><b>Description:</b>{{skill.description}}</p>
                   </div>
                 </div>
               </div>
@@ -38,9 +37,9 @@
       <mat-tab label="Training Recommendations(Moderate SkillGap)" id="header">
         <div id="section2">
           <div class="message" *ngIf="skillGapMessage==1">
-            <p class="toptext"> No Modetare Gap in skills.</p>
-            <p>You have demonstrated proficiency in all moderate-skills. Keep up the good work!</p>
-          </div>
+            <p  class="toptext"> No  Modetare Gap in skills.</p>
+             <p>You have demonstrated proficiency in all moderate-skills. Keep up the good work!</p>
+            </div>
           <div id="recommend-training" *ngFor="let skill of moderateGapSkills">
             <div class="container">
               <div id="firstDiv">
@@ -50,16 +49,16 @@
                 <div class="eachSkill">
                   <p class="skillname">{{skill.skillName}}</p>
                 </div>
-              </div>
+              </div>       
               <div class="secondDiv">
-                <div class="list">
-                  <div>
+                <div class="list">                
+                  <div >
                     <p class="description"><b>Current:</b>{{skill.acReferenceDetailsValues}}</p>
                   </div>
-                  <div>
+                  <div >
                     <p class="description"><b>Recommend:</b>{{skill.exReferenceDetailsValues}}</p>
                   </div>
-                  <div>
+                  <div >
                     <p class="description"><b>Description:</b>{{skill.description}}</p>
                   </div>
                 </div>

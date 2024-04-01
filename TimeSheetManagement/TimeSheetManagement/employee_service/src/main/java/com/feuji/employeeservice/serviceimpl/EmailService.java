@@ -1,8 +1,5 @@
 package com.feuji.employeeservice.serviceimpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +14,6 @@ public class EmailService {
 //        message.setText("Your password reset token is: " + resetToken);
 //
 //        javaMailSender.send(message);
-//    }
+//    }
 
 }

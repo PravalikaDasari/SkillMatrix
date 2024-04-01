@@ -1,7 +1,5 @@
 package com.feuji.employeeservice.serviceimpl;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +16,19 @@ public class UserLoginServiceImpl implements UserLoginService {
 	@Autowired
 	private UserLoginRepo userLoginRepo;
 
-	@Autowired
-	private EmailService emailService;
+//	@Autowired
+//	private EmailService emailService;
 
 	public UserLoginEntity loginUser(String userEmail, String userPassword) {
-	    // Find user by email
-	    UserLoginEntity user = userLoginRepo.findByUserEmail(userEmail);
+		// Find user by email
+		UserLoginEntity user = userLoginRepo.findByUserEmail(userEmail);
 
-	    if (user != null && user.getUserPassword().equals(userPassword)) {
-	        return user; // Return the UserLoginEntity if credentials are valid
-	    } else {
-	        return null; // Return null if credentials are invalid
-	    }
+		if (user != null && user.getUserPassword().equals(userPassword)) {
+			return user; // Return the UserLoginEntity if credentials are valid
+		} else {
+			return null; // Return null if credentials are invalid
+		}
 	}
-
 
 //	public boolean forgotPassword(String userEmail) {
 //		UserLoginEntity user = userLoginRepo.findByUserEmail(userEmail);
@@ -49,8 +46,8 @@ public class UserLoginServiceImpl implements UserLoginService {
 //			return false;
 //		}
 //	}
-
-////	private String generateResetToken() {
-////		return UUID.randomUUID().toString();
-////	}
+//
+//	private String generateResetToken() {
+//		return UUID.randomUUID().toString();
+//	}
 }

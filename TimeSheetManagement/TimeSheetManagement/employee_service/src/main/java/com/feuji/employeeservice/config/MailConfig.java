@@ -10,7 +10,8 @@ public class MailConfig {
 	
 	@Bean
     public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 //        mailSender.setHost("your-mail-server-host"); // e.g., "smtp.gmail.com"
 //        mailSender.setPort(587); // Use the appropriate port for your mail server
 //        mailSender.setUsername("your-email@example.com"); // Your email address
@@ -22,7 +23,7 @@ public class MailConfig {
 //        properties.put("mail.smtp.auth", "true");
 //        properties.put("mail.smtp.starttls.enable", "true");
 //        properties.put("mail.debug", "true"); // Enable debugging for troubleshooting
-        return mailSender;
-    }
-
+		return mailSender;
+	}
 }
+

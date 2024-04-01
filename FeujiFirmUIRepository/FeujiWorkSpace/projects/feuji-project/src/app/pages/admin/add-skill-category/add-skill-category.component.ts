@@ -14,7 +14,8 @@ export class AddSkillCategoryComponent implements OnInit {
   referenceTypeId: number = 0;
   accordionData: any[] = [];
 
-  constructor(private apiService: EmployeeSkillService, public dialogRef: MatDialogRef<AddSkillCategoryComponent>) { }
+  constructor(private apiService: EmployeeSkillService,
+     public dialogRef: MatDialogRef<AddSkillCategoryComponent>) { }
 
   ngOnInit(): void {
     this.fetchSkillCategories();
@@ -32,15 +33,13 @@ export class AddSkillCategoryComponent implements OnInit {
 
   saveSkillCategory(): void {
     if (this.newSkillCategoryName && this.newSkillCategoryName.trim() !== '') {
-
       const selectedCategory = this.accordionData.find(category => category.referenceTypeId);
-
       if (selectedCategory) {
         this.referenceTypeId = selectedCategory.referenceTypeId;
       } else {
-        return;
+        return; 
       }
-
+  
       const skillCategoryBean: SkillCategoryBean = new SkillCategoryBean(
         this.newSkillCategoryName,
         { referenceTypeId: this.referenceTypeId, referenceTypeName: this.newSkillCategoryName },
@@ -48,24 +47,24 @@ export class AddSkillCategoryComponent implements OnInit {
         'Admin',
         ''
       );
-
-
+  
+  
       this.apiService.saveSkillCategoryAdmin(skillCategoryBean).subscribe(
         response => {
           this.fetchSkillCategories();
-          Swal.fire({ title: "Skill category saved successfully", icon: "success" });
+          Swal.fire({title: "Skill category saved successfully", icon: "success"});
           this.dialogRef.close();
         },
         error => {
-          Swal.fire({ title: "Skill Category already Exist", icon: "error" });
+          Swal.fire({title: "Skill Category already Exist", icon: "error"});
           this.dialogRef.close();
         }
       );
     } else {
-      return;
+      console.log('New skill category name is empty or not defined');
     }
   }
-
-}
-
+  
+  }
+  
 

@@ -33,9 +33,11 @@ export class TrainingRecommendationComponent implements OnInit {
   }
 
   getEmployeeSkillsByEmail(empMail:string){
+    console.log(empMail);
     this.empskillService.getSkillsByEmployeeId(empMail).subscribe(
       (resp) => {
         this.empSkills = resp ;
+        console.log(this.empSkills);
         this.empSkills.map(skill => {
          const result=this.generateResult(skill.exReferenceDetailsValues,skill.acReferenceDetailsValues)
          if(result>1){
@@ -57,6 +59,7 @@ export class TrainingRecommendationComponent implements OnInit {
          }
       },
       (error) => {
+        alert("failled")
         Swal.fire({
           title: ' Failed to Fetch!',
           text: 'failed to fetch skill categories',

@@ -4,7 +4,7 @@ import { Skill } from '../../../../models/skill.model';
 import { SkillService } from '../../../../models/skill.service';
 import { HttpClient } from '@angular/common/http';
 import { EmployeeSkillService } from '../../../services/employee-skill.service';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SkillData } from '../../../../models/SkillData.service';
 import Swal from 'sweetalert2';
 
@@ -18,7 +18,6 @@ export class SkillDisplayComponent {
   newSkillDescription: string = '';
   accordionSubData: any[] = [];
   selectedSubSkillCategoryId: number = 0;
-  dialogRef: any;
   status: number = 0;
   skillCategoryName: string = '';
   skillCategoryId: number = 0;
@@ -29,7 +28,8 @@ export class SkillDisplayComponent {
     private http: HttpClient,
     private employeeSkillService: EmployeeSkillService,
     public dialog: MatDialog,
-    private skillDataSevice: SkillData
+    private skillDataSevice: SkillData,
+    public dialogRef: MatDialogRef<SkillDisplayComponent>
   ) { }
 
   ngOnInit(): void {
@@ -37,29 +37,42 @@ export class SkillDisplayComponent {
     this.skillCategoryName = this.data.selectedSkillCategory;
     this.skillDataSevice.accordionSubData$.subscribe(subData => {
       this.accordionSubData = subData;
+      console.log('Sub-skills Data:', this.accordionSubData);
     });
   }
 
-  close(): void {
-    this.dialogRef.close();
+  close(selectedSubSkillCategoryId: any): void {
+    this.dialogRef.close(selectedSubSkillCategoryId);
   }
+
 
   saveSkill() {
     this.employeeSkillService.getSkillCategoryTypeId(this.skillCategoryName)
       .subscribe(response => {
         this.referenceTypeRecord = response
+        console.log(this.referenceTypeRecord);
         this.skillCategoryId = this.referenceTypeRecord.referenceTypeId;
-       
+
+        console.log("skill name " + this.newSkillName)
+        console.log("sub skill name");
+
         if (this.newSkillName.trim() !== '') {
+          console.log('inside if --New sub skill name:', this.newSkillName);
+
+
+
           const skillBean: Skill = new Skill(
             this.newSkillName,
             this.selectedSubSkillCategoryId,
             this.skillCategoryId,
             this.newSkillDescription,
             1,
-            'Admin', 
+            'Admin', //Need to get from login part  !!
             'Admin'
           );
+
+          console.log('--->  SubSkillCategoryBean:', skillBean);
+
           this.employeeSkillService.saveSkillAdmin(skillBean).subscribe(
             (response: any) => {
               Swal.fire({

@@ -1,4 +1,4 @@
-package com.feuji.employeeskillservice.exception;
+package com.feuji.referenceservice.exception;
 
 public class NoRecordFoundException extends Exception {
 

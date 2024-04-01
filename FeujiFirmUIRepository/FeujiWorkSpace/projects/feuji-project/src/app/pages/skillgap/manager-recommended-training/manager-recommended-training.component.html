@@ -6,18 +6,19 @@
   <mat-accordion>
     <mat-expansion-panel class="subCategory" *ngFor="let item of accordionData"
       (opened)="onSelectSkillCategory(item.referenceDetailValue)">
-      <mat-expansion-panel-header>
-        <mat-panel-title class="panelTitle">
+      <mat-expansion-panel-header >
+        <mat-panel-title  class="panelTitle">
           {{item.referenceDetailValue}}
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <mat-panel-description>
         <div *ngIf="accordionSubData">
+          <mat-accordion>
           <mat-expansion-panel class="skillName" *ngFor="let subItem of accordionSubData"
             (opened)="onSelectTechCat(subItem.referenceDetailId)" [style.width.rem]="64">
             <mat-expansion-panel-header>
-              <div>
+              <div >
                 <mat-panel-title class="panelTitle">
                   {{ subItem.referenceDetailValue }}
                   <span
@@ -72,7 +73,7 @@
               </mat-table>
             </mat-panel-description>
           </mat-expansion-panel>
-
+        </mat-accordion>
         </div>
       </mat-panel-description>
 

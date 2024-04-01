@@ -25,6 +25,31 @@ export class EmployeeLayoutComponent {
   }
   rotateArrow(arrowVariable: string) {
     (this as any)[arrowVariable] = !(this as any)[arrowVariable];
+  
+   
+  // submenu5Visible: boolean = false;
+  // submenu6Visible: boolean = false;
+
+  // toggleSubmenu(submenu: string) {
+  //   if (submenu === 'submenu5') {
+  //     this.submenu5Visible = !this.submenu5Visible;
+  //   } else if (submenu === 'submenu6') {
+  //     this.submenu6Visible = !this.submenu6Visible;
+  //   }
+  // }
+//   submenu6Visible: boolean = false;
+
+  // isArrowRotated1: boolean = false;
+
+
+
+// toggleSubmenu(submenu: string) {
+//   this.submenu6Visible = !this.submenu6Visible;
+//   this.isArrowRotated = !this.isArrowRotated;
+// }
+
+
+
 }
 
 public empName:string|null='';

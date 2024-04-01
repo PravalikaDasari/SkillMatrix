@@ -18,8 +18,8 @@ public class UserLoginServiceImpl implements UserLoginService {
 	@Autowired
 	private UserLoginRepo userLoginRepo;
 
-	@Autowired
-	private EmailService emailService;
+//	@Autowired
+//	private EmailService emailService;
 
 	public UserLoginEntity loginUser(String userEmail, String userPassword) {
 	    // Find user by email
@@ -49,8 +49,8 @@ public class UserLoginServiceImpl implements UserLoginService {
 //			return false;
 //		}
 //	}
-
-////	private String generateResetToken() {
-////		return UUID.randomUUID().toString();
-////	}
+//
+//	private String generateResetToken() {
+//		return UUID.randomUUID().toString();
+//	}
 }

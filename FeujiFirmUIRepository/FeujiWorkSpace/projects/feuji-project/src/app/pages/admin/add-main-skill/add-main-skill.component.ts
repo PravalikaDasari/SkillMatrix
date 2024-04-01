@@ -7,6 +7,7 @@ import { SubSkillData } from '../../../../models/SubSkillData.service';
 import { SkillDisplayComponent } from '../../skillgap/skill-display/skill-display.component';
 import { SkillData } from '../../../../models/SkillData.service';
 import Swal from 'sweetalert2';
+import { ConfirmDialogComponent } from '../../skillgap/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-add-main-skill',
@@ -14,8 +15,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-main-skill.component.css'],
 })
 export class AddMainSkillComponent implements OnInit {
-  accordionData: any[] = [];
-  accordionSubData: any[] = [];
+  accordionData: any[] = []; 
+  accordionSubData: any[] = []; 
   panelOpenState: boolean = false;
   selectedTechCat: any;
   allSkills: any[] = [];
@@ -29,16 +30,19 @@ export class AddMainSkillComponent implements OnInit {
   getTechnicalCategory: any;
   selectedSkillCategory: string = '';
   selectedSubSkillCategory: number = 0;
-  constructor(private employeeSkillService: EmployeeSkillService, public dialog: MatDialog, private subSkillDataSevice: SubSkillData, private skillDataSevice: SkillData) {
-
+  constructor(private employeeSkillService: EmployeeSkillService, 
+    public dialog: MatDialog, private subSkillDataSevice: SubSkillData, 
+    private skillDataSevice: SkillData) {
   }
   ngOnInit(): void {
     this.loadSkillCategories();
   }
 
   loadSkillCategories() {
-    this.employeeSkillService.getSkillCategoryNames().subscribe((data: any[]) => {
+    this.employeeSkillService.getSkillCategories('Skill Category').subscribe((data: any[]) => {
       this.accordionData = data;
+      console.log(this.accordionData);
+      
     });
   }
 
@@ -56,7 +60,6 @@ export class AddMainSkillComponent implements OnInit {
   }
   onSelectTechCat(techCat: any) {
     this.selectedSubSkillCategory = techCat;
-    alert("tech cat : " + this.selectedSubSkillCategory)
     this.size = 0;
     this.selectedSubItem = this.accordionSubData.find(item => item.referenceDetailId === techCat);
 
@@ -78,34 +81,23 @@ export class AddMainSkillComponent implements OnInit {
   calculateSize() {
     this.size = this.allSkills.length;
   }
-
-
-
   addNewRow(): void {
     const dialogRef = this.dialog.open(AddSkillCategoryComponent, {
-
-
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.loadSkillCategories();
 
     });
-
-
-
   }
-
-
   addNewSubSkill(selectedsubskillcategory: string): void {
-
-
     const dialogRef = this.dialog.open(AddSubSkillCategoryComponent, {
       panelClass: 'dialog-background',
-      data: { selectedsubskillcategory: selectedsubskillcategory } // Pass data to the dialog
+      data: { selectedsubskillcategory: selectedsubskillcategory } 
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.loadSkillCategories();
     });
   }
 
@@ -118,17 +110,13 @@ export class AddMainSkillComponent implements OnInit {
       data: {
         selectedSubSkillCategory: selectedSubSkillCategory,
         selectedSkillCategory: selectedSkillCategory
-      }
+      } 
+      
     });
-
+    
     dialogRef.afterClosed().subscribe(result => {
-      this.loadSkillCategories();
+      this.onSelectTechCat(this.selectedSubSkillCategory);
     });
-  }
-
-
-  addNewCategory(addingNewCategory: any) {
-
   }
 
   updateStatus(item: any) {
@@ -142,27 +130,18 @@ export class AddMainSkillComponent implements OnInit {
       Swal.fire("No changes to save");
       return;
     }
-
-
     const skillIds = this.changesToSave.map(item => item.skillId);
     const status = this.changesToSave.map(item => item.status ? 1 : 0);
-
-
     this.employeeSkillService.updateStatusAdmin(skillIds, status).subscribe(
       (response: any) => {
         Swal.fire("Status updated successfully");
         this.changesToSave = [];
-
-
-
       },
       (error: any) => {
         Swal.fire("Unable to update status");
       }
     );
   }
-
-
 
   cancelChanges() {
     if (this.changesToSave.length === 0) {
@@ -173,7 +152,46 @@ export class AddMainSkillComponent implements OnInit {
       item.status = !item.status;
       Swal.fire("Cancel the changes done");
     });
-    this.changesToSave = [];
+    this.changesToSave = []; 
   }
 
+  deleteSubCategory(subItemreferenceDetailId:any)
+  {
+    this.employeeSkillService.deleteSubCategory(subItemreferenceDetailId).subscribe((res: any) => {
+      const response = res;
+      this.onSelectSkillCategory(this.selectedSkillCategory)
+    })
+   
+  }
+
+  openConfirmationDialogSubCategory(subItemreferenceDetailId:number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: 'Confirm Deletion', message: 'Are you sure you want to delete?' }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteSubCategory(subItemreferenceDetailId)
+      }
+    });
+  }
+
+  openConfirmationDialogForCategory(categoryName:string)
+  {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: 'Confirm Deletion', message: 'Are you sure you want to delete?' }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteCategory(categoryName)
+      }
+    });
+  }
+
+  deleteCategory(categoryName:string)
+  {
+    this.employeeSkillService.deleteCategory(categoryName).subscribe((res: any) => {
+      const response = res;
+      this.loadSkillCategories();
+    })
+  }
 }

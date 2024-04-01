@@ -78,7 +78,7 @@ public class EmployeeEntity {
     private String exitRemarks;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Byte isDeleted;
 
     @Column(name = "uuid")
     private String uuid;

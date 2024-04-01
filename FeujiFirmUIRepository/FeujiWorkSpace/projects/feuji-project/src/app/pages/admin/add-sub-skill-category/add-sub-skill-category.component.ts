@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { EmployeeSkillService } from '../../../services/employee-skill.service';
 import { SubSkillCategoryBean } from '../../../../models/SubSkillCategoryBean.model';
-import { SubSkillData } from '../../../../models/SubSkillData.service';
 import Swal from 'sweetalert2';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -62,14 +61,14 @@ export class AddSubSkillCategoryComponent implements OnInit {
             },
             error => {
               Swal.fire({
-                title: "Sub Skill category already present",
+                title: "Failed To Save",
                 icon: "error"
               })
               this.dialogRef.close();
             }
           );
         } else {
-          return;
+          console.log('New sub skill category name is empty or not defined');
         }
       });
   }

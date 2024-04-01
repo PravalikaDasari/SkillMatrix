@@ -1,5 +1,6 @@
 .container {
   margin-top: 2%;
+  /* margin-left: 21%; */
 }
 
 .skillName {
@@ -7,7 +8,7 @@
 }
 
 .panelTitle {
-  color: black;
+  color: black !important;
 }
 
 #popupForm {
@@ -65,3 +66,9 @@ mat-cell {
 .xlsxdownload button{
   border: none;
 }
+.mat-expansion-panel-header div .mat-panel-title  {
+  color: green !important; /* Change the color to your desired color */
+}
+
+
+

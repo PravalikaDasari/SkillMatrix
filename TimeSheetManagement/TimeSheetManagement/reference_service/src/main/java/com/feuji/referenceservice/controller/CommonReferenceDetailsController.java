@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.feuji.referenceservice.bean.CommonReferenceDetailsBean;
 import com.feuji.referenceservice.bean.TechnicalSkillsBean;
+import com.feuji.referenceservice.constants.CommonConstants;
 import com.feuji.referenceservice.exception.CategoryNotFoundException;
 import com.feuji.referenceservice.exception.EmptyBeanException;
+import com.feuji.referenceservice.exception.InvalidInputException;
 import com.feuji.referenceservice.exception.NameNotFoundException;
+import com.feuji.referenceservice.exception.NoRecordFoundException;
+import com.feuji.referenceservice.exception.RecordNotFoundException;
 import com.feuji.referenceservice.exception.ReferenceNotFoundException;
 import com.feuji.referenceservice.exception.TechnicalSkillsNotFoundException;
 import com.feuji.referenceservice.repository.CommonReferenceDetailsRepo;
@@ -50,7 +54,6 @@ public class CommonReferenceDetailsController {
 		List<TechnicalSkillsBean> getbyreferenceType=null;
 		try {
 			log.info("Enterd into getReferenceTypeByName method of commomreferenceDetailsController  " + typeName);
-
 			getbyreferenceType = commonReferenceDetailsService.getDetailsByTypeId(typeName);
 			return new ResponseEntity<>(getbyreferenceType, HttpStatus.OK);
 		} catch (TechnicalSkillsNotFoundException e) {
@@ -180,4 +183,32 @@ public class CommonReferenceDetailsController {
 		commonReferenceDetailsService.updateIsDeleted(commonReferenceDetailsBean);
     }
 
+	@PutMapping("/deleteSubskill/{referenceDetailId}")
+    public ResponseEntity<CommonReferenceDetailsBean> deleteSubSkill(@PathVariable Long referenceDetailId) {
+		CommonReferenceDetailsBean deletedBean=null;
+		try {
+			deletedBean = commonReferenceDetailsService.deleteSubSkill(referenceDetailId, true);
+            return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean, HttpStatus.OK);
+		
+		}catch(RecordNotFoundException | NoRecordFoundException | InvalidInputException e)	
+		{
+			log.info(e.getMessage());
+			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean,HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping("/deleteSkillCategory/{skillCategory}")
+	public ResponseEntity<CommonReferenceDetailsBean> deleteSkillcategory(@PathVariable String skillCategory)
+	{
+		CommonReferenceDetailsBean deletedBean=null;
+		try {
+			deletedBean = commonReferenceDetailsService.deleteSkillCategory(skillCategory, CommonConstants.TRUE);
+            return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean, HttpStatus.OK);
+		
+		}catch(RecordNotFoundException e)
+		{
+			log.info(e.getMessage());
+			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean,HttpStatus.NOT_FOUND);
+		}
+	}
 }

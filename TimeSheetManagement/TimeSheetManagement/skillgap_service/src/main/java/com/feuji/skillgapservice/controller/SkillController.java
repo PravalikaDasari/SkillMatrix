@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.feuji.skillgapservice.bean.SkillBean;
+import com.feuji.skillgapservice.commonconstants.CommonConstants;
 import com.feuji.skillgapservice.dto.SkillNamesDto;
 import com.feuji.skillgapservice.entity.SkillEntity;
 import com.feuji.skillgapservice.exception.RecordNotFoundException;
@@ -211,4 +212,20 @@ public class SkillController {
 			return new ResponseEntity<>(skillBeanList, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@PutMapping("deleteSkill/{subSkillCategoryId}")
+    public ResponseEntity<SkillEntity> deleteSkillBySubSkillCategoryId(@PathVariable Long subSkillCategoryId)
+    {
+		List<SkillEntity> deletedSkills =null;
+		deletedSkills = skillService.deleteSkillBySubSkillCategoryId(subSkillCategoryId, (byte)CommonConstants.TRUE);
+		if(deletedSkills.size()>0)
+		{
+			return new ResponseEntity<SkillEntity>(deletedSkills.get(CommonConstants.FALSE),HttpStatus.ACCEPTED);
+		}
+		else {
+			return new ResponseEntity<SkillEntity>(HttpStatus.OK);
+		}
+    }
+	
+	
 }

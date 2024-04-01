@@ -1,7 +1,7 @@
 #container{
   display: flex;
   background-color: #ecf0f4;
-  height: 660px !important ;
+  height: 619px !important ;
   overflow-y: hidden;
 }
 #image{

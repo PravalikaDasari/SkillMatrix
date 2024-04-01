@@ -58,5 +58,3 @@ export class LoginLayoutComponent {
     password: string='';
      
 }
-
-

@@ -27,4 +27,6 @@ public interface SkillService {
 
 	public List<SkillEntity> updateStatusBySkillId(List<Integer> skillIds, List<Byte> status)
 			throws RecordNotFoundException;
+
+	public List<SkillEntity> deleteSkillBySubSkillCategoryId(Long subSkillCategoryId, Byte isDeleted);
 }

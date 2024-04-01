@@ -1,5 +1,3 @@
-// user.model.ts
-
 export class User {
   constructor(
   public userId:number,

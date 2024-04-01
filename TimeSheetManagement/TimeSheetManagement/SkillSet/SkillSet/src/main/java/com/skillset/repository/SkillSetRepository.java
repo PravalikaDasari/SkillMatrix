@@ -28,7 +28,7 @@ public interface SkillSetRepository extends JpaRepository<EmployeeEntity, Intege
 	        "JOIN EmployeeEntity e ON e.employeeId = es.employeeId " +
 	        "JOIN CommonReferenceDetailsEntity sr ON sc.competencyLevelId = sr.referenceDetailId " +
 	        "JOIN CommonReferenceDetailsEntity er ON es.competencyLevelId = er.referenceDetailId " +
-	        "WHERE e.email = :email AND es.isDeleted = 0 AND s.skillCategoryId = :skillCategoryId")
+	        "WHERE e.email = :email AND es.isDeleted = 0 AND s.isDeleted=0 AND s.status=1 AND s.skillCategoryId = :skillCategoryId")
 	List<GapDto> findEmployeeDetailsByEmail(@Param("email") String email, @Param("skillCategoryId") int skillCategoryId);
 
 	

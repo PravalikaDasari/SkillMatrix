@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Setter
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@ToString
 public class UserLoginBean {
 	
 	private Integer userId;

@@ -7,6 +7,9 @@ import javax.naming.NameNotFoundException;
 import com.feuji.referenceservice.bean.CommonReferenceDetailsBean;
 import com.feuji.referenceservice.bean.TechnicalSkillsBean;
 import com.feuji.referenceservice.exception.CategoryNotFoundException;
+import com.feuji.referenceservice.exception.InvalidInputException;
+import com.feuji.referenceservice.exception.NoRecordFoundException;
+import com.feuji.referenceservice.exception.RecordNotFoundException;
 import com.feuji.referenceservice.exception.ReferenceNotFoundException;
 import com.feuji.referenceservice.exception.TechnicalSkillsNotFoundException;
 
@@ -29,4 +32,8 @@ public interface CommonReferenceDetailsService {
 	public void updateIsDeleted(CommonReferenceDetailsBean commonReferenceDetailsBean);
 
 	public String getByid(int id);
+	
+	public CommonReferenceDetailsBean deleteSubSkill(Long referenceDetailId, Boolean isDeleted) throws RecordNotFoundException, NoRecordFoundException, InvalidInputException;
+
+	public CommonReferenceDetailsBean deleteSkillCategory(String skillCategory, Boolean true1) throws RecordNotFoundException;
 }

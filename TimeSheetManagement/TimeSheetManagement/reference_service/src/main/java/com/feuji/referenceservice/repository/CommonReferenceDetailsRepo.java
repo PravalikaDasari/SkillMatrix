@@ -9,7 +9,7 @@ import com.feuji.referenceservice.entity.CommonReferenceDetailsEntity;
 
 public interface CommonReferenceDetailsRepo extends JpaRepository<CommonReferenceDetailsEntity, Long> {
 
-	@Query(value = "select reference_details_values,reference_details_id,rd.reference_type_id from common_reference_details rd where rd.reference_type_id=(select reference_type_id from common_reference_type where reference_type_name=:typeName)", nativeQuery = true)
+	@Query(value = "select reference_details_values,reference_details_id,rd.reference_type_id from common_reference_details rd where rd.reference_type_id=(select reference_type_id from common_reference_type where reference_type_name=:typeName) and rd.is_deleted=0", nativeQuery = true)
 	public List<String> getDetailsByTypeName(String typeName);
 
 	@Query(value = "SELECT reference_details_id FROM common_reference_details WHERE reference_details_values = ?", nativeQuery = true)
@@ -27,6 +27,6 @@ public interface CommonReferenceDetailsRepo extends JpaRepository<CommonReferenc
 			+ " inner JOIN skills s " + "  on s.techinical_category_id=cr.reference_details_id ", nativeQuery = true)
 	List<Object[]> findDistinctReferenceDetailsValues();
 
-	List<CommonReferenceDetailsEntity> findByReferenceDetailValue(String referenceDetailValue);
+	CommonReferenceDetailsEntity findByReferenceDetailValue(String referenceDetailValue);
 
 }

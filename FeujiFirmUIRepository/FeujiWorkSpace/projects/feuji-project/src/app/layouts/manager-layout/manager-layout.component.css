@@ -14,7 +14,7 @@ app-navbar{
 .nav-subitem{
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
 }
 .subitems{
   display: flex;
@@ -69,10 +69,11 @@ font-size: 1.1rem !important;
   overflow-y: auto;
 }
 
+/* Media query for responsiveness */
 @media (max-width: 768px) {
   .side-menu {
-    flex: 0 0 100%; 
-    height: auto;
+    flex: 0 0 100%; /* Side menu takes up full width on smaller screens */
+    height: auto; /* Allow height to adjust based on content */
   }
 }
 

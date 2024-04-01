@@ -15,5 +15,7 @@ export enum ControllerPaths {
    FetchRoles='/getRoles/',
    FetchEmployeeSkills='/fetchBySkillId/',
    GetAllSkills=ControllerPaths.SkillController+'/getAll/',
-   GetAllSkillsForEmployee=ControllerPaths.SkillController+'/getAllForEmployee/'
+   GetAllSkillsForEmployee=ControllerPaths.SkillController+'/getAllForEmployee/',
+   DeletCategory=ControllerPaths.ReferenceController+'/deleteSkillCategory/',
+   DeleteSubCategory=ControllerPaths.ReferenceController+'/deleteSubskill/'
  }  

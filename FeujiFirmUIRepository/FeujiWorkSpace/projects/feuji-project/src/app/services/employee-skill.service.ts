@@ -16,6 +16,8 @@ import { Skill } from '../../models/skill.model';
 })
 export class EmployeeSkillService 
 {
+  
+  
   getSkillCategoryTypeId(selectedsubskillcategory: string): Observable<any> 
   {
     return this.http.get<any>(`http://localhost:8081/api/referencetype/getref/${selectedsubskillcategory}`)
@@ -47,7 +49,10 @@ export class EmployeeSkillService
   {
     return this.http.get<any[]>(`${environment.ReferenceServiceUrl}${Paths.Getreference}${skillCategoryInput}`)
   }
-
+  public getSkillCategoryNames():Observable<any[]>
+  {
+    return this.http.get<any[]>(`http://localhost:8081/api/referencedetails/getref/Skill Category`)
+  }
   getTechnicalCategory(selectedSkillCategory:any):Observable<any[]>{
     return this.http.get<any[]>(`${environment.ReferenceServiceUrl}${Paths.Getreference}${selectedSkillCategory}`); 
   
@@ -63,17 +68,13 @@ export class EmployeeSkillService
   
    }
 
-   
-
    getSkilltype(skillTypeInput:any):Observable<any[]>{
     return this.http.get<any[]>(`${environment.ReferenceServiceUrl}${Paths.Getreference}${skillTypeInput}`); 
 
    }
 
-
    getSkillCompetency(skillCompetencyInput:any):Observable<any[]>{
     return this.http.get<any[]>(`${environment.ReferenceServiceUrl}${Paths.Getreference}${skillCompetencyInput}`); 
-  
    }
  
   postEmployeeSkills(employeeSkill:EmployeeUiBean[]): Observable<EmployeeUiBean[]> {
@@ -88,10 +89,21 @@ export class EmployeeSkillService
  }
 
  deleteRow(employeeSkillId:any){
-  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
   return this.http.put<EmployeeSkillGet>(`${environment.EmployeeSkillUrl}${Paths.Delete}${employeeSkillId}`,{headers});
  
  }
+
+ deleteSubCategory(subItemreferenceDetailId: any)
+  {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+    return this.http.put<any>(`${environment.ReferenceServiceUrl}${Paths.DeleteSubCategory}${subItemreferenceDetailId}`,{headers});
+  }
+
+  deleteCategory(categoryName: string) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+    return this.http.put<any>(`${environment.ReferenceServiceUrl}${Paths.DeletCategory}${categoryName}`,{headers});  }
+
  getSkillsByEmployeeId(email: string): Observable<any> {
   return this.http.get<any>(`${environment.SkillSetUrl}${Paths.Fetch}${email}`);
 }
@@ -108,8 +120,6 @@ saveSkillCategoryAdmin(newCategory: SkillCategoryBean): Observable<SkillCategory
 
 saveSubSkillCategoryAdmin(newSubCategory: SubSkillCategoryBean): Observable<SubSkillCategoryBean> {
   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  console.log("in sevice");
-  
   return this.http.post<SubSkillCategoryBean>('http://localhost:8081/api/referencedetails/addSubSkill', newSubCategory, { headers });
 }
 
@@ -118,11 +128,7 @@ subSkillAdmin(newSkill: Skill): Observable<Skill> {
   return this.http.post<Skill>('http://localhost:8087/api/skill/insert', newSkill, { headers });
 }
 
-public getSkillCategoryNames():Observable<any[]>
-{
 
-  return this.http.get<any[]>(`http://localhost:8081/api/referencedetails/getref/Skill Category`)
-}
 
 
 public getTrainingRecommendedEmployees(skillIds:number[]): Observable<any>

@@ -1,4 +1,4 @@
-package com.skillset.entity;
+package com.feuji.referenceservice.entity;
 
 import java.sql.Timestamp;
 

@@ -19,11 +19,14 @@ export class NavbarComponent {
     });
   }
   setTitleFromRoute() {
+    // Get the current route URL
     const currentUrl = this.router.url;
-
+  
+    // Split the URL by '/' and get the last segment
     const segments = currentUrl.split('/');
     const lastSegment = segments[segments.length - 1];
-
+  
+    // Define logic to set the title based on the last segment of the route URL
     switch (lastSegment) {
       case 'timesheethome':
         this.title = 'Timesheet Home';
@@ -43,22 +46,23 @@ export class NavbarComponent {
       case 'training':
         this.title = 'Training Recommendations';
         break;
-      case 'addSkills':
-        this.title = 'Add Skills';
+        case 'addSkills':
+          this.title = 'Add Skills';
         break;
-      case 'empskillgap':
-        this.title = 'Employees Skill Gap';
+        case 'empskillgap':
+          this.title = 'Employees Skill Gap';
         break;
-      case 'trainingsrecommended':
-        this.title = 'Employees Recommended For Training';
+        case 'trainingsrecommended':
+          this.title = 'Employees Recommended For Training';
         break;
-
+        
       default:
         this.title = 'Dashboard';
         break;
     }
-
+  
+    // Set the title in the browser tab
     this.titleService.setTitle(this.title);
   }
-
+  
 }

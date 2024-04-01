@@ -49,6 +49,7 @@ export class ManagerRecommendedTrainingComponent {
       this.accordionSubData = subSkills;
       this.subSkillDataSevice.updateAccordionSubData(subSkills);
     });
+    console.log(this.accordionSubData);
   }
   onSelectTechCat(techCat: any) {
     this.employees = [];
@@ -61,8 +62,10 @@ export class ManagerRecommendedTrainingComponent {
     this['selectedSubTechCat'] = this.selectedSubItem ? this.selectedSubItem.referenceDetailValue : 'N/A';
     this.employeeSkillService.getSkills(techCat).subscribe((skills: any[]) => {
       this.allSkills = skills;
+      console.log(this.allSkills);
       this.getAllSkillIds(this.allSkills);
       this.getEmployees(this.allSkillIds);
+      console.log(this.allSkillIds);
     },
       (error) => {
         console.error(error);

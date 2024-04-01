@@ -15,20 +15,18 @@ public class EmployeeConfig {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedHeaders("*").allowedMethods("*")
-						.allowedOrigins("*");
+				registry.addMapping("/**").allowedHeaders("*").allowedMethods("*").allowedOrigins("*");
 			}
 		};
 	}
 
-	
 	@Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
-	 @Bean
-	    public EmailService emailService() {
-	        return new EmailService();
-	    }
+	@Bean
+	public EmailService emailService() {
+		return new EmailService();
+	}
 }

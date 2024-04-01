@@ -1,61 +1,55 @@
-.container-fluid {
+.container-fluid{
   padding-top: 4rem;
 }
 
-.ms-2 {
+.ms-2{
   font-size: 1.2rem !important;
   color: rgb(2, 2, 2);
 }
-
-.nav-subitem {
+.nav-subitem{
   display: flex;
   align-items: center;
-  padding-left: 1rem;
 }
-
-.subitems {
+.subitems{
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.material-icons {
+.material-icons{
   padding-left: 1rem;
 }
 
 .nav-item:hover {
-  background-color: rgb(219, 224, 224);
+  background-color:  rgb(219, 224, 224);
 }
 
-.fas {
+.fas{
   font-size: 1.1rem !important;
 
   color: black;
 }
 
 
-.col-2 {
+.col-2{
   background-color: #ecf0f4;
-  height: 100%;
-  position: fixed;
+height: 100%;
+position: fixed;
 }
-
-.col {
+.col{
   margin-left: 18%;
 }
-
-.nav-subitem a span {
+.nav-subitem a span{
   font-size: 1rem !important;
 }
 
 .nav-item.active {
-  background-color: rgb(219, 224, 224);
+  background-color: rgb(219, 224, 224); 
   width: auto;
 }
 
-.subs {
+.subs{
   padding-left: .5rem;
-  font-size: 1.1rem !important;
+font-size: 1.1rem !important;
 }
 
 .rotate {
@@ -69,17 +63,20 @@
   overflow-y: auto;
 }
 
+/* Media query for responsiveness */
 @media (max-width: 768px) {
   .side-menu {
-    flex: 0 0 100%;
-    height: auto;
+    flex: 0 0 100%; /* Side menu takes up full width on smaller screens */
+    height: auto; /* Allow height to adjust based on content */
   }
 }
+
 
 .submenu ul {
   list-style-type: none;
   padding: 0;
 }
+
 
 .submenu {
   display: none;
@@ -96,6 +93,9 @@
 .submenu :hover {
   background-color: #f2f2f2;
 }
+
+
+
 .submenu.show {
   display: block;
 }
