@@ -17,6 +17,10 @@ public class SkillCompetencyConfig {
 		};
 	}
 
-	
+	@Bean
+	 public RestTemplate restTemplate()
+	 {
+		 return new RestTemplate();
+	 }
 	
 }

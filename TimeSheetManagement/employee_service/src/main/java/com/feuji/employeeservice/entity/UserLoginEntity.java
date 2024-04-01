@@ -73,6 +73,6 @@ public class UserLoginEntity {
 	private Boolean flag;
 	
 //	@Column(name = "reset_token")
-//    private String resetToken; 
+//    private String resetToken; 
 
 }

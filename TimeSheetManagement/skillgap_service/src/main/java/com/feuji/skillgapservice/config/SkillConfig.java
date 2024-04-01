@@ -17,5 +17,10 @@ public class SkillConfig {
 		};
 	}
 
+	@Bean
+	 public RestTemplate restTemplate()
+	 {
+		 return new RestTemplate();
+	 }
 
 }

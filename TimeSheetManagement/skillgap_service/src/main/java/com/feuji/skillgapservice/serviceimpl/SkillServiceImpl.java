@@ -12,6 +12,7 @@ import com.feuji.skillgapservice.bean.SkillBean;
 import com.feuji.skillgapservice.commonconstants.CommonConstants;
 import com.feuji.skillgapservice.dto.SkillNamesDto;
 import com.feuji.skillgapservice.entity.SkillEntity;
+import com.feuji.skillgapservice.exception.InputNotFoundException;
 import com.feuji.skillgapservice.exception.RecordNotFoundException;
 import com.feuji.skillgapservice.exception.SkillNotFoundException;
 import com.feuji.skillgapservice.repository.SkillRepository;
@@ -130,7 +131,7 @@ public class SkillServiceImpl implements SkillService {
 	public List<SkillBean> getSkillsByTechCategoryId(int categoryId) {
 		log.info("getSkillsByTechCategoryId Method Start:in SkillServiceImpl");
 		if (categoryId != CommonConstants.FALSE) {
-			List<SkillEntity> entityList = skillRepository.findByTechinicalCategoryId(categoryId);
+			List<SkillEntity> entityList = skillRepository.findByTechinicalCategoryId((long)categoryId);
 			if (entityList != null) {
 				List<SkillBean> beanList = new ArrayList<>();
 				for (SkillEntity e : entityList) {
@@ -326,6 +327,20 @@ public class SkillServiceImpl implements SkillService {
         } else {
         	throw new RecordNotFoundException("Skill with skillId " + skillIds + " does not exist.");
         }
+	}
+
+	@Override
+	public List<SkillEntity> deleteSkillBySubSkillCategoryId(Long subSkillCategoryId, Byte isDeleted)
+	{
+		if(subSkillCategoryId!=null)
+		{
+			skillRepository.deleteSkill(subSkillCategoryId,isDeleted);
+			List<SkillEntity> findByTechinicalCategoryId = skillRepository.findDeletedSkillsByTechinicalCategoryId(subSkillCategoryId);
+			return  findByTechinicalCategoryId;
+		}
+		else {
+			throw new InputNotFoundException("input is null");
+		}
 	}
 
 }

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.feuji.employeeservice"})
+@EnableJpaRepositories(basePackages = { "com.feuji.employeeservice" })
 @EnableTransactionManagement
 public class JPAConfig {
 
