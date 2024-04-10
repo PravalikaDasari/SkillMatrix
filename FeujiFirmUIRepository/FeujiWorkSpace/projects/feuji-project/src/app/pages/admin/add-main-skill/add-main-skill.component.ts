@@ -56,6 +56,7 @@ export class AddMainSkillComponent implements OnInit {
   }
 
   onSelectSkillCategory(selectedSkillCategory: any) {
+    this.size=0;
     this.accordionSubData = [];
     this.selectedSkillCategory = selectedSkillCategory;
 

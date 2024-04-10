@@ -174,7 +174,7 @@ public class SkillCompetencyController {
 			employeeSkillsBySkillIds = skillCompetencyService.getAllEmployeeSkillsBySkillIds(skillId, page, size);
 			log.info("fetcAllSkillIdWise End:Fetched AllSkills Details");
 			return new ResponseEntity<>(employeeSkillsBySkillIds, HttpStatus.OK);
-		} catch (RecordNotFoundException | NullPointerException exception) {
+		} catch (NullPointerException | RecordNotFoundException exception) {
 			log.info("error occured in fetching skillCompetency records");
 			return new ResponseEntity<>(employeeSkillsBySkillIds, HttpStatus.NOT_FOUND);
 		}

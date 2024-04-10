@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, numberAttribute } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EmployeeSkillService } from '../../../services/employee-skill.service';
 import { switchMap } from 'rxjs/operators';
@@ -41,6 +41,7 @@ export class SkillgapDisplayComponent implements OnInit {
   uniqueRoles: { [key: string]: number[] } = {};
   uniqueRoleNames: string[] = [];
   skillIds: number[] = [];
+  empMail: string='';
 
   constructor(private http: HttpClient, private empskillService: EmployeeSkillService) { }
 
@@ -49,6 +50,11 @@ export class SkillgapDisplayComponent implements OnInit {
    *  Displays an error message if fetching fails
    */
   ngOnInit(): void {
+    const email = localStorage.getItem("Email");
+  if (email) {
+    this.empMail = JSON.parse(email);
+  }
+
     this.empskillService.getSkillCategories(this.skillCatogoryInput).subscribe(
       (resp) => {
         this.skillCategories = resp;
@@ -253,45 +259,82 @@ export class SkillgapDisplayComponent implements OnInit {
         })
   }
 
-  /**
-   * Check if the provided skill name matches the skill's name
-   * Determine the background color based on the competency level ID
-   * Return the corresponding image path 
-   */
-  getBackgroundColor1(skillName: String, skill: any, competencyLevelId: number): string {
-    if (skillName === skill.skillName) {
-      if (competencyLevelId === 0) {
-        return '../assets/img/noGap.png';
-      } else if (competencyLevelId === 3) {
-        return '../assets/img/noskill.png';
-      } else if (competencyLevelId < 0) {
-        return '../assets/img/expert.png';
-      }
-      else if (competencyLevelId === 1) {
-        return '../assets/img/lowgap.png';
-      } else {
-        return '../assets/img/lessSkill.png';
-      }
+  generateResult(exReferenceDetailsValues: string, acReferenceDetailsValues: string): string {
+    const levelMapping: { [key: string]: number } = {
+      "No Skill": 0,
+      "Beginner": 1,
+      "Intermediate": 2,
+      "Expert": 3
+    };
+
+    const exLevel: number = levelMapping.hasOwnProperty(exReferenceDetailsValues) ? levelMapping[exReferenceDetailsValues] : -1;
+    const acLevel: number = levelMapping.hasOwnProperty(acReferenceDetailsValues) ? levelMapping[acReferenceDetailsValues] : -1;
+
+    if (exLevel === -1) {
+      console.warn("Unexpected value for exReferenceDetailsValues:", exReferenceDetailsValues);
+    }
+    if (acLevel === -1) {
+      console.warn("Unexpected value for acReferenceDetailsValues:", acReferenceDetailsValues);
+    }
+    const difference = exLevel - acLevel;
+
+    if (exLevel === 0) {
+      return '../assets/img/noskill.png';
+    } else if (difference === 0) {
+      return '../assets/img/noGap.png';
+    } else if (difference === -1) {
+      return '../assets/img/expert.png';
+    }
+    else if (difference === 1) {
+      return '../assets/img/lowgap.png';
     } else {
       return '../assets/img/lessSkill.png';
     }
   }
 
+  generateResultForImg(exReferenceDetailsValues: string, acReferenceDetailsValues: string): any {
+    const levelMapping: { [key: string]: number } = {
+      "No Skill": 0,
+      "Beginner": 1,
+      "Intermediate": 2,
+      "Expert": 3
+    };
+
+    const exLevel: number = levelMapping.hasOwnProperty(exReferenceDetailsValues) ? levelMapping[exReferenceDetailsValues] : -1;
+    const acLevel: number = levelMapping.hasOwnProperty(acReferenceDetailsValues) ? levelMapping[acReferenceDetailsValues] : -1;
+
+    if (exLevel === -1) {
+      console.warn("Unexpected value for exReferenceDetailsValues:", exReferenceDetailsValues);
+    }
+    if (acLevel === -1) {
+      console.warn("Unexpected value for acReferenceDetailsValues:", acReferenceDetailsValues);
+    }
+    return (exLevel - acLevel);
+  }
+  
   /**
    *  Determine the competency text based on the competency level ID
    *  Return a string containing expected competency, actual competency, and gap  
    */
   getCompetencyText(skillBean: SkillsBean): string {
-    switch (skillBean.competencyLevelId) {
+    let value:number= this.generateResultForImg(skillBean.expectedCompetency,skillBean.actualCompetency)
+    switch (value) {
       case 0:
-        return 'Expected: ' + skillBean.expectedCompetency + '\nActual: ' + skillBean.actualCompetency + '\nGap: ' + 'No Gap';
+        return 'Expected: ' + skillBean.expectedCompetency +
+         '\nActual: ' + skillBean.actualCompetency + 
+         '\nGap: ' + 'No Gap';
+      case -1:
+        return 'Expected: ' +skillBean.expectedCompetency  + 
+        '\nActual: ' + skillBean.actualCompetency + 
+        '\nGap: ' + 'Expert';
       case 1:
-        return 'Expected: ' + skillBean.expectedCompetency + '\nActual: ' + skillBean.actualCompetency + '\nGap: ' + 'Less Gap';
-      case 3:
-        return 'Expected: ' + skillBean.expectedCompetency + '\nActual: ' + skillBean.actualCompetency + '\nGap: ' + 'No Skill';
+        return 'Expected: ' + skillBean.expectedCompetency   + 
+        '\nActual: ' + skillBean.actualCompetency + 
+        '\nGap: ' + 'Low Gap';
       default:
-        return skillBean.competencyLevelId < 0 ? 'Expected: ' + skillBean.expectedCompetency + '\nActual: ' + skillBean.actualCompetency + '\nGap: More Than Expected'
-          : 'Expected: ' + skillBean.expectedCompetency + '\nActual: ' + skillBean.actualCompetency + '\nGap: More Gap';
+        return  'Expected: ' + skillBean.expectedCompetency   + 
+        '\nActual: ' + skillBean.actualCompetency + 
+        '\nGap: High Gap';
     }
   }
 }
