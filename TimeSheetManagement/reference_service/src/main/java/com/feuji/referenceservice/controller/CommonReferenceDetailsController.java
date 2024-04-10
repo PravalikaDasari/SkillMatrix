@@ -147,14 +147,16 @@ public class CommonReferenceDetailsController {
 	public ResponseEntity<CommonReferenceDetailsBean> addingSubSkillCategory(
 			@RequestBody CommonReferenceDetailsBean bean) {
 		log.info("Entered into addsubskill commomreferenceDetailsController");
+		CommonReferenceDetailsBean addSubSkillcategory=null;
 		try {
 			log.info("Entered into the saving add subskill in commomreferenceDetailsController");
-			commonReferenceDetailsService.addSubSkillcategory(bean);
+			
+			addSubSkillcategory = commonReferenceDetailsService.addSubSkillcategory(bean);
 			log.info("Completed the saving add subskill in commomreferenceDetailsController");
-			return new ResponseEntity<CommonReferenceDetailsBean>(bean, HttpStatus.ACCEPTED);
+			return new ResponseEntity<CommonReferenceDetailsBean>(addSubSkillcategory, HttpStatus.ACCEPTED);
 		} catch (ReferenceNotFoundException e) {
 			log.info("ReferenceNotFoundException occured in commomreferenceDetailsController");
-			throw new ReferenceNotFoundException("Reference type cannot be null: ");
+			return new ResponseEntity<CommonReferenceDetailsBean>(addSubSkillcategory, HttpStatus.NOT_FOUND);
 		}
 	}
 

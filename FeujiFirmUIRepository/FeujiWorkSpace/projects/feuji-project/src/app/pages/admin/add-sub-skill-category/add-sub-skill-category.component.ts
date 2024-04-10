@@ -36,7 +36,7 @@ export class AddSubSkillCategoryComponent implements OnInit {
 
 
   saveSubSkillCategory() {
-  
+    this.newSubSkillCategoryName = this.newSubSkillCategoryName.trim();
     this.employeeSkillService.getSkillCategoryTypeId(this.selectedsubskillcategory)
       .subscribe(response => {
         this.referenceTypeRecord = response
@@ -61,7 +61,7 @@ export class AddSubSkillCategoryComponent implements OnInit {
             },
             error => {
               Swal.fire({
-                title: "Failed To Save",
+                title: "Sub Skill already present",
                 icon: "error"
               })
               this.dialogRef.close();

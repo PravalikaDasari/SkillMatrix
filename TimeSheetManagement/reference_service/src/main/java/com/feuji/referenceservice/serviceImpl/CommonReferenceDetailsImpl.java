@@ -133,17 +133,33 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 		CommonReferenceDetailsEntity convertBeanToEntity = convertBeanToEntity(referenceDetailsBean);
 		CommonReferenceDetailsEntity existingDetailEntity = commonReferenceDetailsRepo
 				.findByReferenceDetailValue(convertBeanToEntity.getReferenceDetailValue());
-		if (existingDetailEntity != null) {
-			throw new RecordAlreadyExistsException("Record with referenceDetailValue "
-					+ convertBeanToEntity.getReferenceDetailValue() + " already exists.");
-		}
-		convertBeanToEntity = commonReferenceDetailsRepo.save(convertBeanToEntity);
+		
 		CommonReferenceTypeEntity commonReferenceTypeEntity = new CommonReferenceTypeEntity();
+		CommonReferenceTypeEntity findByReferenceTypeName = commonReferenceTypeRepo.findByReferenceTypeName(convertBeanToEntity.getReferenceDetailValue());
+		
 		commonReferenceTypeEntity.setReferenceTypeName(convertBeanToEntity.getReferenceDetailValue());
 		commonReferenceTypeEntity.setCreatedBy(convertBeanToEntity.getCreatedBy());
 		commonReferenceTypeEntity.setIsDeleted(convertBeanToEntity.getIsDeleted());
 		commonReferenceTypeEntity.setModifiedBy(convertBeanToEntity.getModifiedBy());
-		commonReferenceTypeRepo.save(commonReferenceTypeEntity);
+		if (existingDetailEntity != null&& existingDetailEntity.getIsDeleted()==CommonConstants.FALSE ) {
+			throw new RecordAlreadyExistsException("Record with referenceDetailValue "
+					+ convertBeanToEntity.getReferenceDetailValue() + " already exists.");
+		}
+		else if(existingDetailEntity != null &&findByReferenceTypeName!=null && findByReferenceTypeName.getIsDeleted()==CommonConstants.TRUE  && existingDetailEntity.getIsDeleted()==CommonConstants.TRUE)
+		{
+			existingDetailEntity.setIsDeleted(CommonConstants.FALSE);
+			commonReferenceDetailsRepo.save(existingDetailEntity);
+			findByReferenceTypeName.setIsDeleted(CommonConstants.FALSE);
+			commonReferenceTypeRepo.save(findByReferenceTypeName);
+			
+			
+		}
+		else
+		{
+			convertBeanToEntity = commonReferenceDetailsRepo.save(convertBeanToEntity);
+			commonReferenceTypeRepo.save(commonReferenceTypeEntity);
+		}
+		
 	}
 
 	/**
@@ -152,38 +168,32 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 	 *
 	 * @param bean The {@link CommonReferenceDetailsBean} containing details for the
 	 *             sub-skill category to be added.
+	 * @return 
 	 * @throws ReferenceNotFoundException If the reference type in the provided bean
 	 *                                    is null.
 	 */
 	@Override
-	public void addSubSkillcategory(CommonReferenceDetailsBean bean) throws ReferenceNotFoundException {
+	public CommonReferenceDetailsBean addSubSkillcategory(CommonReferenceDetailsBean bean) throws ReferenceNotFoundException {
 		log.info("Entered into addSubSkillCategory method in service implementation");
-
+		CommonReferenceDetailsEntity save =null;
 		CommonReferenceDetailsEntity beanToEntity = convertBeanToEntity(bean);
 		CommonReferenceDetailsEntity existingEntities = commonReferenceDetailsRepo
-				.findByReferenceDetailValue(beanToEntity.getReferenceDetailValue());
+				.findByReferenceDetailValue(beanToEntity.getReferenceDetailValue(),beanToEntity.getReferenceType().getReferenceTypeId());
+		
 		if (existingEntities != null && existingEntities.getIsDeleted() == CommonConstants.FALSE) {
 			log.info("Record with referenceDetailValue " + beanToEntity.getReferenceDetailValue() + " already exists.");
 			throw new RecordAlreadyExistsException(
 					"Record with referenceDetailValue " + beanToEntity.getReferenceDetailValue() + " already exists.");
 		} else if (existingEntities != null && existingEntities.getIsDeleted() == CommonConstants.TRUE) {
 			existingEntities.setIsDeleted(CommonConstants.FALSE);
-			commonReferenceDetailsRepo.save(existingEntities);
-		} else {
-			if (beanToEntity.getReferenceType() == null) {
-				log.info("Getting referenceType null");
-				throw new ReferenceNotFoundException("Reference type cannot be null");
-			}
-
-			if (beanToEntity.getIsDeleted() == null) {
-				log.info("We are setting the isDeleted true here");
-				beanToEntity.setIsDeleted(false);
-			}
-
+			save = commonReferenceDetailsRepo.save(existingEntities);
+		} else if(existingEntities==null) {
 			log.info("Saving the add subSkill into referenceDetails entity");
-			commonReferenceDetailsRepo.save(beanToEntity);
+			beanToEntity.setIsDeleted(CommonConstants.FALSE);
+			save = commonReferenceDetailsRepo.save(beanToEntity);
 			log.info("Completed addSubSkillCategory method in service implementation");
 		}
+		return convertEntityToBean(save);
 	}
 
 	@Override
@@ -290,20 +300,26 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 			CommonReferenceDetailsEntity entity = optionalEntity.get();
 			entity.setIsDeleted(isDeleted);
 			typeEntity.setIsDeleted(isDeleted);
+			List<String> categories = commonReferenceDetailsRepo.getCategories(skillCategory);
 			CommonReferenceDetailsEntity save = commonReferenceDetailsRepo.save(entity);
 			CommonReferenceTypeEntity referenceTypeEntity = commonReferenceTypeRepo.save(typeEntity);
 			
-			List<String> categories = commonReferenceDetailsRepo.getCategories(skillCategory);
-			List<Long> subSkillCategoryIds= new ArrayList<>();
+	//		List<Long> subSkillCategoryIds= new ArrayList<>();
 			for(String subCategory:categories)
 			{
-				Long id = (long) getIdByName(subCategory);
-				subSkillCategoryIds.add(id);
+				 CommonReferenceDetailsEntity value = commonReferenceDetailsRepo.findByReferenceDetailValue(subCategory, typeEntity.getReferenceTypeId());
+				 log.info(value.toString());
+				 if(value!=null)
+					 deleteSubSkill(value.getReferenceDetailId(), isDeleted);
+				 
+
+				//subSkillCategoryIds.add(value);
 			}
-			for(Long id:subSkillCategoryIds)
-			{
-				deleteSubSkill(id, isDeleted);
-			}
+			
+//			for(Long id:subSkillCategoryIds)
+//			{
+//				deleteSubSkill(id, isDeleted);
+//			}
 			return convertEntityToBean(save);
 		} else {
 			throw new RecordNotFoundException("Record not found with this reference details id: " + skillCategoryId);

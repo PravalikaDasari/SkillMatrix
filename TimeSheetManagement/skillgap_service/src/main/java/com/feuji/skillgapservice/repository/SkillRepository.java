@@ -31,7 +31,7 @@ public interface SkillRepository extends JpaRepository<SkillEntity, Integer> {
 			+ "where s.skillId in :skillIds")
 	List<SkillNamesDto> getSkills(int[] skillIds);
 
-	Optional<SkillEntity> findBySkillName(String skillName);
+	 List<Optional<SkillEntity>> findBySkillName(String skillName);
 
 	@Query(value = "select * from skills where techinical_category_id =:categoryId and is_deleted=0 and status=1", nativeQuery = true)
 	List<SkillEntity> findByTechinicalCategoryIdForEmployee(int categoryId);

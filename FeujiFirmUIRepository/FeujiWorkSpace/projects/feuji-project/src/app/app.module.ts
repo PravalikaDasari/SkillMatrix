@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,13 +31,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 
 
-import { User } from '../models/user.model';
 import { UserService } from '../models/user.service';
 import { EmployeeService } from '../models/employee.service';
 import { SkillgapDisplayComponent } from './pages/skillgap/skillgap-display/skillgap-display.component';
 import { CurrentskillsComponent } from './pages/skillgap/currentskills/currentskills.component';
 import { UpdateAccountComponent } from './pages/admin/update-account/update-account.component';
-import { DatePipe } from '@angular/common';
 import { HolidayModule } from '../models/holiday.module';
 import { EmployeeNavbarComponent } from './components/employee-navbar/employee-navbar.component';
 import { EmployeeSidemenuComponent } from './components/employee-sidemenu/employee-sidemenu.component';

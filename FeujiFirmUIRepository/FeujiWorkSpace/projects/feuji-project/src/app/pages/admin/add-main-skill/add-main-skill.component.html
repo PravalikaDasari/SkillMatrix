@@ -39,15 +39,18 @@
       <mat-accordion>
       <div *ngIf="accordionSubData">
         <mat-expansion-panel class="skillName" *ngFor="let subItem of accordionSubData"
+        (opened)="anyPanelExpanded = true" (closed)="anyPanelExpanded = false" #panel="matExpansionPanel"
           (opened)="onSelectTechCat(subItem.referenceDetailId)">
           <mat-expansion-panel-header>
-
-            <mat-panel-title class="panelTitle" id="panel">
+            <mat-panel-title class="panelTitle" id="panel"
+           >
               <div>
                 {{ subItem.referenceDetailValue }}
-              <span
-                *ngIf="selectedSubItem && selectedSubItem.referenceDetailId === subItem.referenceDetailId && accordionSubData.length > 0">-{{
-                size }}</span>
+                <span *ngIf="selectedSubItem && selectedSubItem.referenceDetailId === 
+                subItem.referenceDetailId && accordionSubData.length > 0 && anyPanelExpanded">
+                  - {{ size }}
+                </span>
+                
               </div>
                 <div>
                   <button class="btn btn remove-button btn-sm" 

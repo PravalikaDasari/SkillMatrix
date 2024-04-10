@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.feuji.referenceservice.entity.CommonReferenceDetailsEntity;
 
@@ -27,6 +28,11 @@ public interface CommonReferenceDetailsRepo extends JpaRepository<CommonReferenc
 			+ " inner JOIN skills s " + "  on s.techinical_category_id=cr.reference_details_id ", nativeQuery = true)
 	List<Object[]> findDistinctReferenceDetailsValues();
 
-	CommonReferenceDetailsEntity findByReferenceDetailValue(String referenceDetailValue);
+	@Query(value="select * from common_reference_details where reference_type_id=:reference_type_id and reference_details_values=:reference_details_values ",nativeQuery=true)
+	CommonReferenceDetailsEntity findByReferenceDetailValue(@Param("reference_details_values") String reference_details_values,@Param("reference_type_id") Long reference_type_id);
+
+	public CommonReferenceDetailsEntity findByReferenceDetailValue(String referenceDetailValue);
+	
+ //  public CommonReferenceDetailsEntity getIdByNameAndCategoryId(@Param("reference_details_values" String reference_details_values,@Param("reference_type_id") Long reference_type_id);
 
 }

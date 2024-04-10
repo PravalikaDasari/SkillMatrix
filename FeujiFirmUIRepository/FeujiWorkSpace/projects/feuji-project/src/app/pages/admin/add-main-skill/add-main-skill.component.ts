@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { EmployeeSkillService } from '../../../services/employee-skill.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddSkillCategoryComponent } from '../add-skill-category/add-skill-category.component';
@@ -8,13 +8,18 @@ import { SkillDisplayComponent } from '../../skillgap/skill-display/skill-displa
 import { SkillData } from '../../../../models/SkillData.service';
 import Swal from 'sweetalert2';
 import { ConfirmDialogComponent } from '../../skillgap/confirm-dialog/confirm-dialog.component';
-
+import { MatExpansionPanel } from '@angular/material/expansion';
 @Component({
   selector: 'app-add-main-skill',
   templateUrl: './add-main-skill.component.html',
   styleUrls: ['./add-main-skill.component.css'],
 })
 export class AddMainSkillComponent implements OnInit {
+
+  @ViewChildren('panel') panels!: QueryList<MatExpansionPanel>;
+  anyPanelExpanded: boolean = false;
+
+
   accordionData: any[] = []; 
   accordionSubData: any[] = []; 
   panelOpenState: boolean = false;
@@ -30,12 +35,19 @@ export class AddMainSkillComponent implements OnInit {
   getTechnicalCategory: any;
   selectedSkillCategory: string = '';
   selectedSubSkillCategory: number = 0;
+  
   constructor(private employeeSkillService: EmployeeSkillService, 
     public dialog: MatDialog, private subSkillDataSevice: SubSkillData, 
     private skillDataSevice: SkillData) {
   }
   ngOnInit(): void {
     this.loadSkillCategories();
+  }
+
+  ngAfterViewInit(): void {
+    this.panels.changes.subscribe((panels: QueryList<MatExpansionPanel>) => {
+      this.anyPanelExpanded = panels.some(panel => panel.expanded);
+    });
   }
 
   loadSkillCategories() {
@@ -97,7 +109,7 @@ export class AddMainSkillComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadSkillCategories();
+      this.onSelectSkillCategory(selectedsubskillcategory);
     });
   }
 
@@ -159,7 +171,7 @@ export class AddMainSkillComponent implements OnInit {
   {
     this.employeeSkillService.deleteSubCategory(subItemreferenceDetailId).subscribe((res: any) => {
       const response = res;
-      this.onSelectSkillCategory(this.selectedSkillCategory)
+      
     })
    
   }
@@ -171,7 +183,14 @@ export class AddMainSkillComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.deleteSubCategory(subItemreferenceDetailId)
+        Swal.fire({
+          title: ' Deleted Successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
+        this.onSelectSkillCategory(this.selectedSkillCategory)
       }
+      
     });
   }
 
@@ -183,6 +202,13 @@ export class AddMainSkillComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.deleteCategory(categoryName)
+        Swal.fire({
+          title: ' Deleted Successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
+        this.loadSkillCategories();
+
       }
     });
   }
@@ -191,7 +217,7 @@ export class AddMainSkillComponent implements OnInit {
   {
     this.employeeSkillService.deleteCategory(categoryName).subscribe((res: any) => {
       const response = res;
-      this.loadSkillCategories();
-    })
-  }
+     this.loadSkillCategories();
+    })
+  }
 }

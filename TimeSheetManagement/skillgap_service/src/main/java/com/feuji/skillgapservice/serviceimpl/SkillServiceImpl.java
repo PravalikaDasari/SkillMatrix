@@ -42,15 +42,38 @@ public class SkillServiceImpl implements SkillService {
 	public SkillBean saveSkill(SkillBean skillBean) {
 	    log.info("Service saveSkill Method Start");
 	    try {
-	        Optional<SkillEntity> existingSkill = skillRepository.findBySkillName(skillBean.getSkillName());
-	        if (existingSkill.isPresent()) {
-	            throw new IllegalArgumentException("Skill with name '" + skillBean.getSkillName() + "' already exists");
+	    	SkillEntity entity = null;
+	        List<Optional<SkillEntity>> existingSkills = skillRepository.findBySkillName(skillBean.getSkillName());
+	        log.info(existingSkills.toString());
+	        for(Optional<SkillEntity> existingSkill:existingSkills)
+	        {
+	        	if (existingSkill.isPresent()&& existingSkill.get().getIsDeleted()==CommonConstants.FALSE 
+		        		&& existingSkill.get().getTechinicalCategoryId()==skillBean.getTechinicalCategoryId())
+	        	{
+		            throw new IllegalArgumentException("Skill with name '" + skillBean.getSkillName() + "' already exists");
+		        }
+		        else if (existingSkill.isPresent() && existingSkill.get().getIsDeleted()==CommonConstants.TRUE
+		        		&& existingSkill.get().getTechinicalCategoryId()==skillBean.getTechinicalCategoryId())
+		        { 
+		        	existingSkill.get().setIsDeleted((byte)CommonConstants.FALSE); 
+		        	existingSkill.get().setStatus((byte)CommonConstants.TRUE); 
+		        	existingSkill.get().setDescription(skillBean.getDescription());
+		        	entity = skillRepository.save(existingSkill.get()); 
+		        	return entityToBean(entity);
+		        	
+		        }
+//		        else {
+//			       SkillEntity beanToEntity  = beanToEntity(skillBean);
+//			        entity = skillRepository.save(beanToEntity);
+//			        log.info("Service saveSkill Method End");
+//			        break;
+//		        }
 	        }
 	        
-	        SkillEntity entity = beanToEntity(skillBean);
-	        SkillEntity save = skillRepository.save(entity);
+	        SkillEntity beanToEntity  = beanToEntity(skillBean);
+	        entity = skillRepository.save(beanToEntity);
 	        log.info("Service saveSkill Method End");
-	        return entityToBean(save);
+	        return entityToBean(entity); 
 	    }catch(NullPointerException e)
 	    {
 	    	throw new IllformedLocaleException("failed to save");

@@ -6,6 +6,9 @@ import { TrainigRecommendedEmployeesDto } from '../../../../models/TrainigRecomm
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import ExcelJS from 'exceljs';
+
+
 
 @Component({
   selector: 'app-manager-recommended-training',
@@ -161,31 +164,44 @@ export class ManagerRecommendedTrainingComponent {
     }
   }
  
-downloadExcel() {
-  const selectedSkillCategory = this['selectedSkillCategory'] || 'N/A';
-  const selectedSubTechCat = this['selectedSubTechCat'] || 'N/A';
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.book_new();
-  const categoryData = [
-      ['Skill Category', selectedSkillCategory], 
-      ['SubSkill Category', selectedSubTechCat]
-  ];
-  XLSX.utils.sheet_add_aoa(worksheet, categoryData, { origin: -1 });
-  const employeeData = this.updatedEmployees.map(employee => [
-    employee.employeeName,
-    employee.designition,
-    employee.email,
-    employee.skillName,
-    employee.actualCompetency,
-    employee.expectedCompetency
-  ]);
-  const header = ['EmployeeName', 'Designition', 'Email','SkillName','ActualCompetency','ExpectedCompetency']; // Add other headers as needed
-  XLSX.utils.sheet_add_aoa(worksheet, [header, ...employeeData], { origin: -1 });
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Recommended Training');
-  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  const fileName = 'recommended_training.xlsx';
-  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-  saveAs(blob, fileName);
-}
-
+  downloadExcel() {
+    const selectedSkillCategory = this['selectedSkillCategory'] || 'N/A';
+    const selectedSubTechCat = this['selectedSubTechCat'] || 'N/A';
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Recommended Training');
+    const categoryData = [
+      ['Skill Category', 'SubSkill Category'],
+      [selectedSkillCategory, selectedSubTechCat],
+      [], 
+      ['EmployeeName', 'Designation', 'Email', 'SkillName', 'ActualCompetency', 'ExpectedCompetency']
+    ];
+    categoryData.forEach((row, index) => {
+      const sheetRow = worksheet.addRow(row);
+      if (index < 1) { 
+        sheetRow.eachCell(cell => {
+          cell.font = { bold: true };
+        });
+      } else if (index === 3) { 
+        sheetRow.font = { bold: true };
+      }
+    });
+    this.updatedEmployees.forEach(employee => {
+      worksheet.addRow([
+        employee.employeeName,
+        employee.designition,
+        employee.email,
+        employee.skillName,
+        employee.actualCompetency,
+        employee.expectedCompetency
+      ]);
+    });
+    workbook.xlsx.writeBuffer()
+      .then(buffer => {
+        const fileName = 'recommended_training.xlsx';
+        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        saveAs(blob, fileName);
+      });
+  }
+  
+  
 }

@@ -27,7 +27,7 @@ public interface CommonReferenceDetailsService {
 
 	public void saveReferenceDetails(CommonReferenceDetailsBean referenceDetailsBean);
 
-	public void addSubSkillcategory(CommonReferenceDetailsBean bean) throws ReferenceNotFoundException;
+	public CommonReferenceDetailsBean addSubSkillcategory(CommonReferenceDetailsBean bean) throws ReferenceNotFoundException;
 
 	public void updateIsDeleted(CommonReferenceDetailsBean commonReferenceDetailsBean);
 
