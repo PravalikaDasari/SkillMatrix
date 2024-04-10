@@ -16,10 +16,11 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 })
 export class AddMainSkillComponent implements OnInit {
 
-  @ViewChildren('panel') panels!: QueryList<MatExpansionPanel>;
   anyPanelExpanded: boolean = false;
-
-
+  enableCount()
+  {
+    this.anyPanelExpanded=true;
+  }
   accordionData: any[] = []; 
   accordionSubData: any[] = []; 
   panelOpenState: boolean = false;
@@ -44,11 +45,7 @@ export class AddMainSkillComponent implements OnInit {
     this.loadSkillCategories();
   }
 
-  ngAfterViewInit(): void {
-    this.panels.changes.subscribe((panels: QueryList<MatExpansionPanel>) => {
-      this.anyPanelExpanded = panels.some(panel => panel.expanded);
-    });
-  }
+  
 
   loadSkillCategories() {
     this.employeeSkillService.getSkillCategories('Skill Category').subscribe((data: any[]) => {
@@ -171,7 +168,7 @@ export class AddMainSkillComponent implements OnInit {
   {
     this.employeeSkillService.deleteSubCategory(subItemreferenceDetailId).subscribe((res: any) => {
       const response = res;
-      
+      this.onSelectSkillCategory(this.selectedSkillCategory);
     })
    
   }

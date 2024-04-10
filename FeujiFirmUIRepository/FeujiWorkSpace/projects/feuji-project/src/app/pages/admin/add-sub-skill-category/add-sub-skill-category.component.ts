@@ -36,6 +36,7 @@ export class AddSubSkillCategoryComponent implements OnInit {
 
 
   saveSubSkillCategory() {
+    this.newSubSkillCategoryName=this.newSubSkillCategoryName.replace(/\s+/g, ' ');
     this.newSubSkillCategoryName = this.newSubSkillCategoryName.trim();
     this.employeeSkillService.getSkillCategoryTypeId(this.selectedsubskillcategory)
       .subscribe(response => {

@@ -32,6 +32,7 @@ export class AddSkillCategoryComponent implements OnInit {
   }
 
   saveSkillCategory(): void {
+    this.newSkillCategoryName = this.newSkillCategoryName.replace(/\s+/g, ' ');
     this.newSkillCategoryName = this.newSkillCategoryName.trim();
     if (this.newSkillCategoryName && this.newSkillCategoryName.trim() !== '') {
       const selectedCategory = this.accordionData.find(category => category.referenceTypeId);

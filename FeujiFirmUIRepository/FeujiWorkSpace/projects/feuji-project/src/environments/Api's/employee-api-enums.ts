@@ -17,5 +17,6 @@ export enum ControllerPaths {
    GetAllSkills=ControllerPaths.SkillController+'/getAll/',
    GetAllSkillsForEmployee=ControllerPaths.SkillController+'/getAllForEmployee/',
    DeletCategory=ControllerPaths.ReferenceController+'/deleteSkillCategory/',
-   DeleteSubCategory=ControllerPaths.ReferenceController+'/deleteSubskill/'
+   DeleteSubCategory=ControllerPaths.ReferenceController+'/deleteSubskill/',
+   SaveSkillCategory=ControllerPaths.ReferenceController+'/save'
  }  

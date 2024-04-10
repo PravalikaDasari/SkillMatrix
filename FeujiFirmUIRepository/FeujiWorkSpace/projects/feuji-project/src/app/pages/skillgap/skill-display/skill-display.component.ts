@@ -57,22 +57,16 @@ export class SkillDisplayComponent {
         console.log("sub skill name");
 
         if (this.newSkillName.trim() !== '') {
-          console.log('inside if --New sub skill name:', this.newSkillName);
-
-
-
+          this.newSkillName=this.newSkillName.replace(/\s+/g, ' ').trim();
           const skillBean: Skill = new Skill(
             this.newSkillName,
             this.selectedSubSkillCategoryId,
             this.skillCategoryId,
             this.newSkillDescription,
             1,
-            'Admin', //Need to get from login part  !!
+            'Admin', 
             'Admin'
           );
-
-          console.log('--->  SubSkillCategoryBean:', skillBean);
-
           this.employeeSkillService.saveSkillAdmin(skillBean).subscribe(
             (response: any) => {
               Swal.fire({

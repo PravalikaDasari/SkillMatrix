@@ -115,7 +115,7 @@ getSkillsOfEmployee(email: string, skillcategoryid:number): Observable<any> {
 
 saveSkillCategoryAdmin(newCategory: SkillCategoryBean): Observable<SkillCategoryBean> {
   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  return this.http.post<SkillCategoryBean>('http://localhost:8081/api/referencedetails/save', newCategory, { headers });
+  return this.http.post<SkillCategoryBean>(`${environment.ReferenceServiceUrl}${Paths.SaveSkillCategory}`, newCategory, { headers });
 }
 
 saveSubSkillCategoryAdmin(newSubCategory: SubSkillCategoryBean): Observable<SubSkillCategoryBean> {

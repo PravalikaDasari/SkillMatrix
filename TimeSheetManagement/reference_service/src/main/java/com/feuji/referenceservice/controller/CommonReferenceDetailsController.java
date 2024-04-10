@@ -179,6 +179,8 @@ public class CommonReferenceDetailsController {
 		commonReferenceDetailsService.saveReferenceDetails(referenceDetailsBean);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+	
+	
 	@PutMapping("/updateIsDeleted")
     public void updateIsDeleted(@RequestBody CommonReferenceDetailsBean commonReferenceDetailsBean) 
     {
