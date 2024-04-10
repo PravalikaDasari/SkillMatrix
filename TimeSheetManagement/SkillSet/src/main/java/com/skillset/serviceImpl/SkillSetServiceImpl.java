@@ -29,7 +29,9 @@ public class SkillSetServiceImpl implements SkillSetService {
 
 	public List<GapDto> fetchSkillDto(String email, Integer skillCategoryId) throws RecordNotFoundException {
 		log.info("fetchSkillDto start");
-		List<GapDto> queryResult = repository.findEmployeeDetailsByEmail(email, skillCategoryId);
+		String categoryName = repository.repogetTypeNameByCategoryId(skillCategoryId);
+		int typeId = repository.getTypeIdByDetailsId(categoryName);
+		List<GapDto> queryResult = repository.findEmployeeDetailsByEmail(email, typeId);
 		if(queryResult!= null)
 		{
 			log.info("fetchSkillDto end");
@@ -39,6 +41,9 @@ public class SkillSetServiceImpl implements SkillSetService {
 		}
 	}
 	
+	
+	
+
 	/**
 	Retrieves the skills of an employee identified by the provided email address.
 	@param email The email address of the employee whose skills are to be retrieved.

@@ -73,7 +73,7 @@ public class EmployeeSkillController {
 	 *         HTTP status OK if successful.
 	 */
 	@GetMapping("/getEmployeeSkillById/{employeeId}")
-	public ResponseEntity<List<EmployeeSkillBean>> getEmployeeSkillById(@PathVariable Long employeeId) {
+	public ResponseEntity<List<EmployeeSkillBean>> getEmployeeSkillById(@PathVariable Integer employeeId) {
 		log.info("getEmployeeSkillById Start: in EmployeeSkillController");
 		List<EmployeeSkillBean> list = null;
 		try {

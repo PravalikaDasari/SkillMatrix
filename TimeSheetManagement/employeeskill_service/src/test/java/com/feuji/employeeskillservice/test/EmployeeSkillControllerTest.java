@@ -314,7 +314,7 @@ public class EmployeeSkillControllerTest {
 	 */
 	@Test
 	public void testGetEmployeeSkillById_Success() throws NoRecordFoundException {
-		Long employeeId = 1L;
+		Integer employeeId = 1;
 		List<EmployeeSkillBean> employeeSkillBeanList = new ArrayList<>();
 		when(employeeSkillService.getEmployeeSkillById(employeeId)).thenReturn(employeeSkillBeanList);
 

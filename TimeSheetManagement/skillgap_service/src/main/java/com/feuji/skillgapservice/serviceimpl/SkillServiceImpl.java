@@ -48,26 +48,26 @@ public class SkillServiceImpl implements SkillService {
 	        for(Optional<SkillEntity> existingSkill:existingSkills)
 	        {
 	        	if (existingSkill.isPresent()&& existingSkill.get().getIsDeleted()==CommonConstants.FALSE 
-		        		&& existingSkill.get().getTechinicalCategoryId()==skillBean.getTechinicalCategoryId())
+		        		&& existingSkill.get().getTechinicalCategoryId()==skillBean.getTechinicalCategoryId()
+		        		&& existingSkill.get().getSkillCategoryId() == skillBean.getSkillCategoryId() )
 	        	{
 		            throw new IllegalArgumentException("Skill with name '" + skillBean.getSkillName() + "' already exists");
 		        }
 		        else if (existingSkill.isPresent() && existingSkill.get().getIsDeleted()==CommonConstants.TRUE
-		        		&& existingSkill.get().getTechinicalCategoryId()==skillBean.getTechinicalCategoryId())
+		        		&& existingSkill.get().getTechinicalCategoryId()==skillBean.getTechinicalCategoryId()
+		        		&& existingSkill.get().getSkillCategoryId() == skillBean.getSkillCategoryId())
 		        { 
 		        	existingSkill.get().setIsDeleted((byte)CommonConstants.FALSE); 
 		        	existingSkill.get().setStatus((byte)CommonConstants.TRUE); 
 		        	existingSkill.get().setDescription(skillBean.getDescription());
+		        	existingSkill.get().setCreatedBy(skillBean.getCreatedBy());
+		        	existingSkill.get().setModifiedBy(skillBean.getModifiedBy());
+		        	existingSkill.get().setTechinicalCategoryId(skillBean.getTechinicalCategoryId());
+		        	existingSkill.get().setSkillCategoryId(skillBean.getSkillCategoryId());
 		        	entity = skillRepository.save(existingSkill.get()); 
 		        	return entityToBean(entity);
 		        	
 		        }
-//		        else {
-//			       SkillEntity beanToEntity  = beanToEntity(skillBean);
-//			        entity = skillRepository.save(beanToEntity);
-//			        log.info("Service saveSkill Method End");
-//			        break;
-//		        }
 	        }
 	        
 	        SkillEntity beanToEntity  = beanToEntity(skillBean);

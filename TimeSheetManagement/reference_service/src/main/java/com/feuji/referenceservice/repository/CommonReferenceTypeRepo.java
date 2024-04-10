@@ -12,4 +12,6 @@ public interface CommonReferenceTypeRepo extends JpaRepository<CommonReferenceTy
 
 	public CommonReferenceTypeEntity findByReferenceTypeName(String referenceDetailValue);
 
+	@Query(value = "select reference_type_name from timesheet_entry_system_db.common_reference_type where reference_type_id=:id ", nativeQuery = true)
+	public String getNameById(int id);
 }

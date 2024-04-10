@@ -12,7 +12,7 @@ import com.feuji.employeeskillservice.exception.NoRecordFoundException;
 public interface EmployeeSkillService {
 	public EmployeeSkillBean saveEmployeeSkill(EmployeeSkillBean bean) throws Exception;
 
-	public List<EmployeeSkillBean> getEmployeeSkillById(Long employeeId) throws NoRecordFoundException;
+	public List<EmployeeSkillBean> getEmployeeSkillById(Integer employeeId) throws NoRecordFoundException;
 
 	public List<EmployeeSkillBean> saveAll(List<EmployeeSkillBean> beanList);
 

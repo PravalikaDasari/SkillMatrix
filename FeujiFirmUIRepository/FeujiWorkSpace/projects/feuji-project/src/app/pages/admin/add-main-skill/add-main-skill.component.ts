@@ -91,6 +91,7 @@ export class AddMainSkillComponent implements OnInit {
     this.size = this.allSkills.length;
   }
   addNewRow(): void {
+    this.size=0;
     const dialogRef = this.dialog.open(AddSkillCategoryComponent, {
     });
 
@@ -100,6 +101,7 @@ export class AddMainSkillComponent implements OnInit {
     });
   }
   addNewSubSkill(selectedsubskillcategory: string): void {
+    this.size=0;
     const dialogRef = this.dialog.open(AddSubSkillCategoryComponent, {
       panelClass: 'dialog-background',
       data: { selectedsubskillcategory: selectedsubskillcategory } 

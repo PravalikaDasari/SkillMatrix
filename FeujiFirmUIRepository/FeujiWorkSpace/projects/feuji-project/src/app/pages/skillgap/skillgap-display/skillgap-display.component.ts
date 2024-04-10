@@ -153,6 +153,7 @@ export class SkillgapDisplayComponent implements OnInit {
    *  If not, display an error message
    */
   onSelectRole(role: any) {
+    this.page=0;
     this.selectedRoleName = role.target.value;
     if (this.uniqueRoles.hasOwnProperty(this.selectedRoleName)) {
       this.skillIds = this.uniqueRoles[this.selectedRoleName];
@@ -222,6 +223,7 @@ export class SkillgapDisplayComponent implements OnInit {
     * Display error message if fetching skill names fai
    */
   onsearch() {
+    
     this.empskillService.getEmployeSkillsBySkillId(this.skillIds, this.page, this.size)
       .pipe(
         switchMap((res) => {

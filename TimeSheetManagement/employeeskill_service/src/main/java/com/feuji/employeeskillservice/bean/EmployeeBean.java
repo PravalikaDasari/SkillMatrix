@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class EmployeeBean {
 
-	private Long employeeId;
+	private Integer employeeId;
 	private String employeeCode;
 	private String firstName;
 	private String middleName;

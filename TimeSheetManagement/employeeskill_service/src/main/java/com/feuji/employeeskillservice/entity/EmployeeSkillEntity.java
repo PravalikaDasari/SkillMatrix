@@ -34,7 +34,7 @@ public class EmployeeSkillEntity
 	private Long employeeSkillId;
 	
 	@Column(name="employee_id")
-	private Long employeeId;
+	private int employeeId;
 	
 	@Column(name="employee_code")
 	private String employeeCode;

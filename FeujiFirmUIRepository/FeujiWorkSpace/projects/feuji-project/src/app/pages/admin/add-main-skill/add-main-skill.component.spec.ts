@@ -11,14 +11,14 @@ describe('AddMainSkillComponent', () => {
   let mockMatDialog: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
-    mockEmployeeSkillService = jasmine.createSpyObj('EmployeeSkillService', ['getSkillCategories', 'getTechnicalCategory', 'getSkills', 'updateStatusAdmin', 'deleteSubCategory', 'deleteCategory']);
     mockMatDialog = jasmine.createSpyObj('MatDialog', ['open']);
+    mockEmployeeSkillService = jasmine.createSpyObj('EmployeeSkillService', ['getSkillCategories', 'getTechnicalCategory', 'getSkills']);
 
     await TestBed.configureTestingModule({
       declarations: [AddMainSkillComponent],
       providers: [
-        { provide: EmployeeSkillService, useValue: mockEmployeeSkillService },
-        { provide: MatDialog, useValue: mockMatDialog }
+        { provide: MatDialog, useValue: mockMatDialog },
+        { provide: EmployeeSkillService, useValue: mockEmployeeSkillService }
       ]
     }).compileComponents();
 

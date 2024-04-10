@@ -9,12 +9,12 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeSkillBean 
 {
 	private Long employeeSkillId;
-	private Long employeeId;
+	private Integer employeeId;
 	private String employeeCode;
 	private int skillId;
 	private int competencyLevelId;

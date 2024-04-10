@@ -156,6 +156,8 @@ getAllEmployeeSkills(empMail: string) {
   */
   onSelectSkillCategory(event: any, index: number) {
     this.skillCategory = event.target.value
+    console.log(this.skillCategory);
+    
     this.empskillService.getTechnicalCategory(this.skillCategory).subscribe((resp: any) => {
       this.technicalcategories[index] = resp;
     },
@@ -176,6 +178,8 @@ getAllEmployeeSkills(empMail: string) {
   onSelectTechnicalCategory(event: any, index: number) {
 
     const selectedTechnicalCategory = event.target.value;
+    console.log(selectedTechnicalCategory);
+    
     this.empskillService
       .getSkillsForEmployee(selectedTechnicalCategory)
       .subscribe((res: any[]) => {

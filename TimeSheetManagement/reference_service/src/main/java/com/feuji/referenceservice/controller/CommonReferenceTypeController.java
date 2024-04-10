@@ -87,5 +87,20 @@ public class CommonReferenceTypeController {
 		}
 	}
 	
+	@GetMapping("/getById/{id}")
+	public ResponseEntity<String> getById(@PathVariable int id) {
+		log.info("getById() started");
+		String name = null;
+		try {
+			name = commonReferenceTypeService.getNameById(id);
+			log.info("getById() ended");
+			return new ResponseEntity<String>(name, HttpStatus.OK);
+		} catch (ReferenceNotFoundException e) {
+			log.info(e.getMessage());
+			return new ResponseEntity<String>(name, HttpStatus.NOT_FOUND);
+
+		}
+	}
+
 	
 }

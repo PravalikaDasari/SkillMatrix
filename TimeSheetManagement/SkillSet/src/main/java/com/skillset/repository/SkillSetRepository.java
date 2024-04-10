@@ -48,7 +48,16 @@ public interface SkillSetRepository extends JpaRepository<EmployeeEntity, Intege
 	        "JOIN CommonReferenceDetailsEntity cre ON s.skillCategoryId = cre.referenceDetailId "+
 	        "JOIN CommonReferenceDetailsEntity crd ON s.techinicalCategoryId=crd.referenceDetailId "+
 	        "WHERE e.email = :email AND es.isDeleted = 0")
-	List<SkillGapDto> findEmployeeSkills(@Param("email") String email);
+	public List<SkillGapDto> findEmployeeSkills(@Param("email") String email);
+
+	@Query(value="select referenceTypeId from CommonReferenceTypeEntity cr where "
+			+ " cr.referenceTypeName =:referenceTypeName ")
+	public Integer getTypeIdByDetailsId(String referenceTypeName);
+
+	@Query(value="select referenceDetailValue from "
+			+ " CommonReferenceDetailsEntity crd where "
+			+ "referenceDetailId=:referenceDetailId")
+	public String repogetTypeNameByCategoryId(Integer referenceDetailId);
 	
 	
 

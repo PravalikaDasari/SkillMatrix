@@ -30,6 +30,7 @@ import com.feuji.referenceservice.exception.TechnicalSkillsNotFoundException;
 import com.feuji.referenceservice.repository.CommonReferenceDetailsRepo;
 import com.feuji.referenceservice.repository.CommonReferenceTypeRepo;
 import com.feuji.referenceservice.service.CommonReferenceDetailsService;
+import com.feuji.referenceservice.service.CommonReferenceTypeService;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,9 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 	private CommonReferenceTypeRepo commonReferenceTypeRepo;
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	CommonReferenceTypeImpl commonReferenceTypeImpl;
 
 	/*
 	 * Converts a {@link CommonReferenceDetailsBean} to a {@link
@@ -69,7 +73,6 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 
 	@Override
 	public List<TechnicalSkillsBean> getDetailsByTypeId(String typeName) throws TechnicalSkillsNotFoundException {
-		log.info("result" + typeName);
 
 		List<String> detailsByTypeName = commonReferenceDetailsRepo.getDetailsByTypeName(typeName);
 		if (detailsByTypeName == null || detailsByTypeName.isEmpty()) {
@@ -129,7 +132,9 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 	}
 
 	@Override
-	public void saveReferenceDetails(CommonReferenceDetailsBean referenceDetailsBean) {
+	public CommonReferenceTypeBean saveReferenceDetails(CommonReferenceDetailsBean referenceDetailsBean) {
+		CommonReferenceTypeBean bean=null;
+		CommonReferenceTypeEntity save=null;
 		CommonReferenceDetailsEntity convertBeanToEntity = convertBeanToEntity(referenceDetailsBean);
 		CommonReferenceDetailsEntity existingDetailEntity = commonReferenceDetailsRepo
 				.findByReferenceDetailValue(convertBeanToEntity.getReferenceDetailValue());
@@ -150,16 +155,16 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 			existingDetailEntity.setIsDeleted(CommonConstants.FALSE);
 			commonReferenceDetailsRepo.save(existingDetailEntity);
 			findByReferenceTypeName.setIsDeleted(CommonConstants.FALSE);
-			commonReferenceTypeRepo.save(findByReferenceTypeName);
-			
-			
+			 save = commonReferenceTypeRepo.save(findByReferenceTypeName);
+			bean = commonReferenceTypeImpl.convertEntityToBean(save);
 		}
 		else
 		{
 			convertBeanToEntity = commonReferenceDetailsRepo.save(convertBeanToEntity);
-			commonReferenceTypeRepo.save(commonReferenceTypeEntity);
+			save = commonReferenceTypeRepo.save(commonReferenceTypeEntity);
+			bean = commonReferenceTypeImpl.convertEntityToBean(save);
 		}
-		
+		return bean;
 	}
 
 	/**
@@ -197,23 +202,29 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 	}
 
 	@Override
-	public void updateIsDeleted(CommonReferenceDetailsBean commonReferenceDetailsBean) {
-		CommonReferenceDetailsEntity convertBeanToEntity = convertBeanToEntity(commonReferenceDetailsBean);
-		convertBeanToEntity = commonReferenceDetailsRepo.findById(commonReferenceDetailsBean.getReferenceDetailId())
-				.get();
-		convertBeanToEntity.setIsDeleted(commonReferenceDetailsBean.getIsDeleted());
-		commonReferenceDetailsRepo.save(convertBeanToEntity);
-		CommonReferenceTypeEntity byTypeName = commonReferenceTypeRepo
-				.findByReferenceTypeName(commonReferenceDetailsBean.getReferenceDetailValue());
-		byTypeName.setIsDeleted(convertBeanToEntity.getIsDeleted());
-		commonReferenceTypeRepo.save(byTypeName);
+	public CommonReferenceDetailsBean updateIsDeleted(CommonReferenceDetailsBean commonReferenceDetailsBean) throws InvalidInputException {
+		log.info("updateIsDeleted started in CommonReferenceDetailsServiceImpl");
+		if(commonReferenceDetailsBean!=null)
+		{
+			CommonReferenceDetailsEntity convertBeanToEntity = convertBeanToEntity(commonReferenceDetailsBean);
+			convertBeanToEntity = commonReferenceDetailsRepo.findById(commonReferenceDetailsBean.getReferenceDetailId())
+					.get();
+			convertBeanToEntity.setIsDeleted(commonReferenceDetailsBean.getIsDeleted());
+			CommonReferenceDetailsEntity save = commonReferenceDetailsRepo.save(convertBeanToEntity);
+			CommonReferenceTypeEntity byTypeName = commonReferenceTypeRepo
+					.findByReferenceTypeName(commonReferenceDetailsBean.getReferenceDetailValue());
+			byTypeName.setIsDeleted(convertBeanToEntity.getIsDeleted());
+			commonReferenceTypeRepo.save(byTypeName);
+			log.info("updateIsDeleted ende in CommonReferenceDetailsServiceImpl");
+			return convertEntityToBean(save);
+		}else {
+			throw new InvalidInputException("input is null");
+		}
+			
+			
 
 	}
 
-	@Override
-	public List<String> getSubSkillCategory() throws EntityNotFoundException {
-		return null;
-	}
 
 	public CommonReferenceDetailsBean convertEntityToBean(CommonReferenceDetailsEntity detailsEntity) {
 		CommonReferenceTypeBean commonReferenceTypeBean = new CommonReferenceTypeBean();
@@ -237,7 +248,7 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 			CommonReferenceDetailsEntity entity = optionalEntity.get();
 			entity.setIsDeleted(isDeleted);
 			CommonReferenceDetailsEntity save = commonReferenceDetailsRepo.save(entity);
-			SkillEntity skillEntity = deleteSkill(referenceDetailId);
+			deleteSkill(referenceDetailId);
 			return convertEntityToBean(save);
 		} else {
 			throw new RecordNotFoundException("Record not found with this reference details id: " + referenceDetailId);
@@ -264,30 +275,6 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 
 	}
 
-//	public SkillBean getSkillbeanById(int skillId) throws InvalidInputException, NoRecordFoundException {
-//		log.info("getSkillbeanById() started: in EmployeeSkillServiceImpl");
-//		if (skillId != CommonConstants.FALSE) {
-//			String url = "http://localhost:8087/api/skill/getBySkillId/" + skillId;
-//
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//			HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-//
-//			ResponseEntity<SkillBean> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,
-//					SkillBean.class);
-//			log.info("getSkillbeanById() ended:in EmployeeSkillServiceImpl");
-//			if (responseEntity.getBody() != null) {
-//				return responseEntity.getBody();
-//			} else {
-//				throw new NoRecordFoundException("no records found with this id: " + skillId);
-//			}
-//		} else {
-//			throw new InvalidInputException("invalid input is entered:in EmployeeSkillServiceImpl");
-//		}
-//	}
-//
-//
 
 	@Override
 	public CommonReferenceDetailsBean deleteSkillCategory(String skillCategory, Boolean isDeleted)
@@ -304,26 +291,20 @@ public class CommonReferenceDetailsImpl implements CommonReferenceDetailsService
 			CommonReferenceDetailsEntity save = commonReferenceDetailsRepo.save(entity);
 			CommonReferenceTypeEntity referenceTypeEntity = commonReferenceTypeRepo.save(typeEntity);
 			
-	//		List<Long> subSkillCategoryIds= new ArrayList<>();
 			for(String subCategory:categories)
 			{
 				 CommonReferenceDetailsEntity value = commonReferenceDetailsRepo.findByReferenceDetailValue(subCategory, typeEntity.getReferenceTypeId());
 				 log.info(value.toString());
 				 if(value!=null)
 					 deleteSubSkill(value.getReferenceDetailId(), isDeleted);
-				 
 
-				//subSkillCategoryIds.add(value);
 			}
-			
-//			for(Long id:subSkillCategoryIds)
-//			{
-//				deleteSubSkill(id, isDeleted);
-//			}
 			return convertEntityToBean(save);
 		} else {
 			throw new RecordNotFoundException("Record not found with this reference details id: " + skillCategoryId);
 		}
 	}
+
+	
 
 }

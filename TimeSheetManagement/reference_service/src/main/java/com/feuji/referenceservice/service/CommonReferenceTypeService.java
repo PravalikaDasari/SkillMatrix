@@ -5,6 +5,8 @@ import com.feuji.referenceservice.entity.CommonReferenceTypeEntity;
 
 public interface CommonReferenceTypeService {
 
+	public String getNameById(int id);
+	
 	public CommonReferenceTypeBean getByTypeName(String typeName);
 
 	public CommonReferenceTypeEntity saveTimesheetWeek(CommonReferenceTypeBean commonReferenceTypeBean);

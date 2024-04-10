@@ -248,7 +248,7 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 	 *                                employee ID, this exception is thrown.
 	 */
 	@Override
-	public List<EmployeeSkillBean> getEmployeeSkillById(Long employeeId) throws NoRecordFoundException {
+	public List<EmployeeSkillBean> getEmployeeSkillById(Integer employeeId) throws NoRecordFoundException {
 		if (employeeId != null) {
 			log.info("getEmployeeSkillById() start: in EmployeeSkillServiceImpl");
 			List<EmployeeSkillEntity> list = repository.findByEmployeeId(employeeId);
@@ -412,6 +412,7 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,
 					String.class);
 			if (responseEntity != null) {
+				
 				log.info("GetIdByName() ended:in EmployeeSkillServiceImpl");
 				return Integer.parseInt(responseEntity.getBody());
 			} else {
@@ -421,6 +422,27 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 			throw new InvalidInputException("invalid input::in EmployeeSkillServiceImpl");
 		}
 	}
+	
+	public String getTypeNameFromTypeService(int id) throws NoRecordFoundException, InvalidInputException {
+		if (id != CommonConstants.FALSE) {
+			log.info("getTypeName() started: in EmployeeSkillServiceImpl");
+			String url = "http://localhost:8081/api/referencetype/getById/" + id;
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+
+			 ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+					String.class);
+			log.info("getTypeName() ended:in EmployeeSkillServiceImpl");
+			return exchange.getBody();
+		} else {
+			throw new InvalidInputException("invalid input:in EmployeeSkillServiceImpl");
+		}
+
+	}
+
 
 	/**
 	 * Converts an employee skill bean to an employee skill get bean.
@@ -438,7 +460,7 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 			SkillBean skillBean = getSkillbeanById(employeeSkillBean.getSkillId());
 			EmployeeSkillGet skill = new EmployeeSkillGet();
 			skill.setEmployeeSkillId(employeeSkillBean.getEmployeeSkillId());
-			skill.setSkillCategory(getTypeName(skillBean.getSkillCategoryId()));
+			skill.setSkillCategory(getTypeNameFromTypeService(skillBean.getSkillCategoryId()));
 			skill.setTechnicalCategory(getTypeName(skillBean.getTechinicalCategoryId()));
 			skill.setSkillTypeId(getTypeName(employeeSkillBean.getSkillTypeId()));
 			skill.setSkillId(skillBean.getSkillName());

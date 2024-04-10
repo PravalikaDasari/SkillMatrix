@@ -79,4 +79,15 @@ public class CommonReferenceTypeImpl implements CommonReferenceTypeService {
 		return commonReferenceTypeEntity;
 	}
 
+	@Override
+	public String getNameById(int id) {
+		log.info("getByid() started");
+		String nameById = commonReferenceTypeRepo.getNameById(id);
+		if (nameById != null) {
+			log.info("getByid() ended");
+			return nameById;
+		} else {
+			throw new ReferenceNotFoundException("no suitable name found for this id: "+id);
+		}
+	}
 }

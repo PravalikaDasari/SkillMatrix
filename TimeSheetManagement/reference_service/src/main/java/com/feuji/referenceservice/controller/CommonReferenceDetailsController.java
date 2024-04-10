@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.feuji.referenceservice.bean.CommonReferenceDetailsBean;
+import com.feuji.referenceservice.bean.CommonReferenceTypeBean;
 import com.feuji.referenceservice.bean.TechnicalSkillsBean;
 import com.feuji.referenceservice.constants.CommonConstants;
 import com.feuji.referenceservice.exception.CategoryNotFoundException;
-import com.feuji.referenceservice.exception.EmptyBeanException;
 import com.feuji.referenceservice.exception.InvalidInputException;
 import com.feuji.referenceservice.exception.NameNotFoundException;
 import com.feuji.referenceservice.exception.NoRecordFoundException;
+import com.feuji.referenceservice.exception.RecordAlreadyExistsException;
 import com.feuji.referenceservice.exception.RecordNotFoundException;
 import com.feuji.referenceservice.exception.ReferenceNotFoundException;
 import com.feuji.referenceservice.exception.TechnicalSkillsNotFoundException;
@@ -41,6 +42,84 @@ public class CommonReferenceDetailsController {
 
 	@Autowired
 	CommonReferenceDetailsRepo commonReferenceDetailsRepo2;
+	
+	@PostMapping("/addSubSkill")
+	public ResponseEntity<CommonReferenceDetailsBean> addingSubSkillCategory(
+			@RequestBody CommonReferenceDetailsBean bean) 
+	{
+		log.info("addingSubSkillCategory is started in  commomreferenceDetailsController");
+		CommonReferenceDetailsBean addSubSkillcategory=null;
+		try {
+			addSubSkillcategory = commonReferenceDetailsService.addSubSkillcategory(bean);
+			log.info("addingSubSkillCategory is end in  commomreferenceDetailsController");
+			return new ResponseEntity<CommonReferenceDetailsBean>(addSubSkillcategory, HttpStatus.ACCEPTED);
+		} catch (ReferenceNotFoundException e) {
+			log.info(e.getCause()+"ReferenceNotFoundException occured in commomreferenceDetailsController");
+			return new ResponseEntity<CommonReferenceDetailsBean>(addSubSkillcategory, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@PostMapping("/save")
+    public ResponseEntity<CommonReferenceTypeBean> saveReferenceDetails(@RequestBody CommonReferenceDetailsBean referenceDetailsBean) {
+		log.info("saveReferenceDetails is started in CommonReferenceDetailsController");
+		CommonReferenceTypeBean saveReferenceDetails =null;
+		try {
+			saveReferenceDetails = commonReferenceDetailsService.saveReferenceDetails(referenceDetailsBean);
+			log.info("saveReferenceDetails is end in CommonReferenceDetailsController");
+			return new ResponseEntity<CommonReferenceTypeBean>(saveReferenceDetails,HttpStatus.CREATED);
+		}catch(RecordAlreadyExistsException e)
+		{
+			log.info(e.getMessage());
+			return new ResponseEntity<CommonReferenceTypeBean>(saveReferenceDetails,HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/updateIsDeleted")
+    public ResponseEntity<CommonReferenceDetailsBean> updateIsDeleted(@RequestBody CommonReferenceDetailsBean commonReferenceDetailsBean) 
+    {
+		log.info("updateIsDeleted is started in CommonReferenceDetailsController");
+		CommonReferenceDetailsBean updateIsDeleted =null;
+		try {
+			 updateIsDeleted = commonReferenceDetailsService.updateIsDeleted(commonReferenceDetailsBean);
+				log.info("updateIsDeleted is end in CommonReferenceDetailsController");
+			 return new ResponseEntity<CommonReferenceDetailsBean>(updateIsDeleted,HttpStatus.OK);
+		} catch (InvalidInputException e) {
+			log.info(e.getMessage());
+			 return new ResponseEntity<CommonReferenceDetailsBean>(updateIsDeleted,HttpStatus.BAD_REQUEST);
+		}
+    }
+
+	@PutMapping("/deleteSubskill/{referenceDetailId}")
+    public ResponseEntity<CommonReferenceDetailsBean> deleteSubSkill(@PathVariable Long referenceDetailId) {
+		log.info("deleteSubSkill is started in CommonReferenceDetailsController");
+		CommonReferenceDetailsBean deletedBean=null;
+		try {
+			deletedBean = commonReferenceDetailsService.deleteSubSkill(referenceDetailId, true);
+			log.info("deleteSubSkill is end in CommonReferenceDetailsController");
+            return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean, HttpStatus.OK);
+		
+		}catch(RecordNotFoundException | NoRecordFoundException | InvalidInputException e){
+			log.info(e.getMessage());
+			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean,HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping("/deleteSkillCategory/{skillCategory}")
+	public ResponseEntity<CommonReferenceDetailsBean> deleteSkillcategory(@PathVariable String skillCategory)
+	{
+		log.info("deleteSkillcategory is started in CommonReferenceDetailsController");
+		CommonReferenceDetailsBean deletedBean=null;
+		try {
+			deletedBean = commonReferenceDetailsService.deleteSkillCategory(skillCategory, CommonConstants.TRUE);
+			log.info("deleteSkillcategory is end in CommonReferenceDetailsController");
+			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean, HttpStatus.OK);
+		}catch(RecordNotFoundException | NoRecordFoundException | InvalidInputException e)
+		{
+			log.info(e.getMessage());
+			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean,HttpStatus.NOT_FOUND);
+		}
+	}
+	
 	/**
 	 * Retrieves a list of technical skills beans based on the specified type name.
 	 *
@@ -143,76 +222,5 @@ public class CommonReferenceDetailsController {
 		}
 	}
 	
-	@PostMapping("/addSubSkill")
-	public ResponseEntity<CommonReferenceDetailsBean> addingSubSkillCategory(
-			@RequestBody CommonReferenceDetailsBean bean) {
-		log.info("Entered into addsubskill commomreferenceDetailsController");
-		CommonReferenceDetailsBean addSubSkillcategory=null;
-		try {
-			log.info("Entered into the saving add subskill in commomreferenceDetailsController");
-			
-			addSubSkillcategory = commonReferenceDetailsService.addSubSkillcategory(bean);
-			log.info("Completed the saving add subskill in commomreferenceDetailsController");
-			return new ResponseEntity<CommonReferenceDetailsBean>(addSubSkillcategory, HttpStatus.ACCEPTED);
-		} catch (ReferenceNotFoundException e) {
-			log.info("ReferenceNotFoundException occured in commomreferenceDetailsController");
-			return new ResponseEntity<CommonReferenceDetailsBean>(addSubSkillcategory, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/getSubSkills")
-	public ResponseEntity<List<String>> getsubSkills() {
-		log.info("Entered into getsubskills commomreferenceDetailsController");
-		try {
-			log.info("Entered into getSubSkillCategory method of service in commomreferenceDetailsController");
-			List<String> subSkillCategory = commonReferenceDetailsService.getSubSkillCategory();
-			log.info("Coming out from  getSubSkillCategory method of service in commomreferenceDetailsController");
-			return ResponseEntity.ok(subSkillCategory);
-		} catch (EmptyBeanException e) {
-			log.info("EmptyBeanException oocured in commomreferenceDetailsController");
-			throw new EmptyBeanException("No records found in this table");
-		}
-	}
 	
-	@PostMapping("/save")
-    public ResponseEntity<CommonReferenceDetailsBean> saveReferenceDetails(@RequestBody CommonReferenceDetailsBean referenceDetailsBean) {
-		commonReferenceDetailsService.saveReferenceDetails(referenceDetailsBean);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-	
-	
-	@PutMapping("/updateIsDeleted")
-    public void updateIsDeleted(@RequestBody CommonReferenceDetailsBean commonReferenceDetailsBean) 
-    {
-		commonReferenceDetailsService.updateIsDeleted(commonReferenceDetailsBean);
-    }
-
-	@PutMapping("/deleteSubskill/{referenceDetailId}")
-    public ResponseEntity<CommonReferenceDetailsBean> deleteSubSkill(@PathVariable Long referenceDetailId) {
-		CommonReferenceDetailsBean deletedBean=null;
-		try {
-			deletedBean = commonReferenceDetailsService.deleteSubSkill(referenceDetailId, true);
-            return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean, HttpStatus.OK);
-		
-		}catch(RecordNotFoundException | NoRecordFoundException | InvalidInputException e)	
-		{
-			log.info(e.getMessage());
-			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean,HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	@PutMapping("/deleteSkillCategory/{skillCategory}")
-	public ResponseEntity<CommonReferenceDetailsBean> deleteSkillcategory(@PathVariable String skillCategory)
-	{
-		CommonReferenceDetailsBean deletedBean=null;
-		try {
-			deletedBean = commonReferenceDetailsService.deleteSkillCategory(skillCategory, CommonConstants.TRUE);
-            return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean, HttpStatus.OK);
-		
-		}catch(RecordNotFoundException | NoRecordFoundException | InvalidInputException e)
-		{
-			log.info(e.getMessage());
-			return new ResponseEntity<CommonReferenceDetailsBean>(deletedBean,HttpStatus.NOT_FOUND);
-		}
-	}
 }
